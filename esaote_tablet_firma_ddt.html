@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>DT Platform — Firma DDT</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--brand:#063d6e;--acc:#1565c0;--ok:#1a7a4a;--okl:#e6f4ec;--okb:#c3e6d0;--warn:#f57c00;--err:#b01020;--bg:#f0f4f8;--sur:#fff;--txt:#0d1b2a;--mut:#607080;--bor:#dde3ec;--sub:#a0abb8}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased;user-select:none;touch-action:manipulation}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg)}
+.screen.active{display:flex}
+.hdr{background:var(--brand);padding:14px 18px 12px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hdr-icon{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.hdr-title{font-size:16px;font-weight:700;color:#fff}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+.hdr-badge{padding:4px 10px;background:rgba(255,255,255,.15);border-radius:10px;font-size:11px;color:#fff;font-weight:600;margin-left:auto}
+.steps{display:flex;padding:10px 16px;gap:0;background:var(--sur);border-bottom:1px solid var(--bor);flex-shrink:0}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:12px;left:50%;width:100%;height:2px;background:var(--bor);z-index:0}
+.step.done::after{background:var(--ok)}.step.active::after{background:var(--acc)}
+.sdot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;z-index:1;flex-shrink:0}
+.sdot.done{background:var(--ok);color:#fff}.sdot.act{background:var(--acc);color:#fff}.sdot.pend{background:#e0e0e0;color:#999}
+.slbl{font-size:9px;color:var(--mut);font-weight:500;text-align:center;white-space:nowrap}
+.body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+.card{background:var(--sur);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.card-title{font-size:14px;font-weight:700;color:var(--brand);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.mi{background:var(--bg);border-radius:9px;padding:11px 12px}
+.ml{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.mv{font-size:14px;font-weight:700}
+.field{margin-bottom:16px}
+.flbl{font-size:12px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:block}
+.finp{width:100%;border:2px solid var(--bor);border-radius:10px;padding:14px;font-size:17px;font-family:inherit;outline:none;color:var(--txt);background:var(--sur);transition:.15s;-webkit-appearance:none;appearance:none}
+.finp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(21,101,192,.12)}
+.finp.rdonly{background:var(--bg);color:var(--mut)}
+.ditem{background:var(--sur);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+.dic{width:44px;height:44px;border-radius:10px;background:#e3edf8;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.dii{flex:1}.did{font-size:13px;font-weight:700;color:var(--acc)}.dis{font-size:12px;color:var(--mut);margin-top:3px}
+.dst{font-size:11px;padding:3px 9px;border-radius:9px;font-weight:600}
+.dst.pend{background:#e3edf8;color:var(--acc)}.dst.done{background:var(--okl);color:var(--ok)}
+#sig-canvas{display:block;width:100%;background:#fff;border-radius:10px;border:2px solid var(--bor);cursor:crosshair;touch-action:none}
+#sig-canvas.has-sig{border-color:var(--ok)}
+.sig-hint{text-align:center;font-size:13px;color:var(--mut);margin-top:10px}
+.sig-clear{background:none;border:none;color:var(--err);font-size:13px;cursor:pointer;padding:8px;font-family:inherit;text-decoration:underline;display:none;margin:4px auto 0;display:block}
+.bf{width:100%;padding:16px;border-radius:12px;border:none;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:.12s}
+.bf.primary{background:var(--brand);color:#fff}.bf.primary:active{background:#0d47a1}
+.bf.ok{background:var(--ok);color:#fff}.bf.ok:active{background:#145a38}
+.bf.sec{background:var(--sur);color:var(--brand);border:2px solid var(--bor)}
+.bf.ghost{background:none;border:none;color:var(--err);font-size:14px}
+.bf:disabled{opacity:.38;cursor:not-allowed}
+.foot{padding:16px;background:var(--sur);border-top:1px solid var(--bor);display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.notice{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
+.n-warn{background:#fff8e1;border:1px solid #ffe082;color:var(--warn)}
+.n-info{background:#e3edf8;border:1px solid #bbdefb;color:var(--acc)}
+.n-ok{background:var(--okl);border:1px solid var(--okb);color:var(--ok)}
+.spinner{width:40px;height:40px;border:4px solid #e0e0e0;border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- S0 — ATTESA / HOME -->
+<div class="screen active" id="s0">
+  <div class="hdr">
+    <div class="hdr-icon">🚛</div>
+    <div>
+      <div class="hdr-title">DT Platform · Firma DDT</div>
+      <div class="hdr-sub">Esaote SpA · Ciclo Attivo</div>
+    </div>
+    <div class="hdr-badge">v5.0</div>
+  </div>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;text-align:center">
+    <div style="font-size:64px">🚚</div>
+    <div>
+      <div style="font-size:22px;font-weight:700;color:var(--brand);margin-bottom:6px">App Firma DDT</div>
+      <div style="font-size:14px;color:var(--mut)">Esaote SpA · DT Platform</div>
+    </div>
+    <div id="s0-notice" style="width:100%;max-width:380px">
+      <div class="notice n-info"><span>ℹ️</span><div>In attesa di un trasporto dal portale desk.<br>Dal portale: <strong>Firma DDT → Invia al tablet</strong></div></div>
+    </div>
+    <div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px">
+      <button class="bf primary" onclick="checkLS()">🔄 Controlla disponibilità</button>
+      <button class="bf sec" onclick="loadDemo()">⚡ Carica dati demo</button>
+    </div>
+  </div>
+</div>
+
+<!-- S1 — RIEPILOGO TRASPORTO -->
+<div class="screen" id="s1">
+  <div class="hdr">
+    <div class="hdr-icon">📋</div>
+    <div><div class="hdr-title" id="s1-title">Trasporto</div><div class="hdr-sub">Verifica i dati</div></div>
+  </div>
+  <div class="steps" id="steps-1">
+    <div class="step active"><div class="sdot act">1</div><div class="slbl">Trasporto</div></div>
+    <div class="step pend"><div class="sdot pend">2</div><div class="slbl">Autista</div></div>
+    <div class="step pend"><div class="sdot pend">3</div><div class="slbl">Documenti</div></div>
+    <div class="step pend"><div class="sdot pend">4</div><div class="slbl">Firma</div></div>
+    <div class="step pend"><div class="sdot pend">5</div><div class="slbl">Fine</div></div>
+  </div>
+  <div class="body">
+    <div class="card"><div class="card-title">📦 Dati trasporto</div><div class="mgrid" id="s1-meta"></div>
+      <div class="notice n-info"><span>ℹ️</span><div>Verifica che il numero corrisponda alla tua spedizione prima di procedere.</div></div>
+    </div>
+    <div class="card"><div class="card-title">📄 Documenti da firmare</div><div id="s1-ddts"></div></div>
+  </div>
+  <div class="foot">
+    <button class="bf primary" onclick="gs(2)">Procedi — Dati autista →</button>
+    <button class="bf ghost" onclick="gs(0)">✕ Non è il mio trasporto</button>
+  </div>
+</div>
+
+<!-- S2 — FORM AUTISTA -->
+<div class="screen" id="s2">
+  <div class="hdr">
+    <div class="hdr-icon">👤</div>
+    <div><div class="hdr-title">Dati autista</div><div class="hdr-sub">Compila i tuoi dati</div></div>
+  </div>
+  <div class="steps">
+    <div class="step done"><div class="sdot done">✓</div><div class="slbl">Trasporto</div></div>
+    <div class="step active"><div class="sdot act">2</div><div class="slbl">Autista</div></div>
+    <div class="step pend"><div class="sdot pend">3</div><div class="slbl">Documenti</div></div>
+    <div class="step pend"><div class="sdot pend">4</div><div class="slbl">Firma</div></div>
+    <div class="step pend"><div class="sdot pend">5</div><div class="slbl">Fine</div></div>
+  </div>
+  <div class="body">
+    <div class="card">
+      <div class="card-title">✏️ Inserisci i tuoi dati</div>
+      <div class="field"><label class="flbl">Nome *</label><input class="finp" id="f-nome" type="text" placeholder="Es. Marco" autocapitalize="words" autocomplete="given-name"></div>
+      <div class="field"><label class="flbl">Cognome *</label><input class="finp" id="f-cognome" type="text" placeholder="Es. Conforti" autocapitalize="words" autocomplete="family-name"></div>
+      <div class="field"><label class="flbl">Targa del veicolo *</label><input class="finp" id="f-targa" type="text" placeholder="Es. MI 234 AB" autocomplete="off" oninput="this.value=this.value.toUpperCase()"></div>
+      <div class="field"><label class="flbl">Data ritiro (pickup date)</label><input class="finp rdonly" id="f-pickup" type="text" readonly><div style="font-size:11px;color:var(--sub);margin-top:5px">Pre-compilata dalla piattaforma — non modificabile</div></div>
+    </div>
+  </div>
+  <div class="foot">
+    <button class="bf primary" onclick="validateForm()">Vai ai documenti →</button>
+    <button class="bf ghost" onclick="gs(1)">← Indietro</button>
+  </div>
+</div>
+
+<!-- S3 — DOCUMENTI -->
+<div class="screen" id="s3">
+  <div class="hdr">
+    <div class="hdr-icon">📄</div>
+    <div><div class="hdr-title">Documenti da firmare</div><div class="hdr-sub" id="s3-sub">— DDT</div></div>
+  </div>
+  <div class="steps">
+    <div class="step done"><div class="sdot done">✓</div><div class="slbl">Trasporto</div></div>
+    <div class="step done"><div class="sdot done">✓</div><div class="slbl">Autista</div></div>
+    <div class="step active"><div class="sdot act">3</div><div class="slbl">Documenti</div></div>
+    <div class="step pend"><div class="sdot pend">4</div><div class="slbl">Firma</div></div>
+    <div class="step pend"><div class="sdot pend">5</div><div class="slbl">Fine</div></div>
+  </div>
+  <div class="body">
+    <div class="notice n-warn"><span>⚠️</span><div><strong>Attenzione:</strong> la firma sarà apposta su tutti i documenti. Verificali prima di procedere.</div></div>
+    <div id="s3-ddts"></div>
+    <div class="card"><div class="card-title">👤 Riepilogo dati</div><div class="mgrid" id="s3-riepilogo"></div></div>
+  </div>
+  <div class="foot">
+    <button class="bf primary" onclick="gs(4)">✍ Vai alla firma →</button>
+    <button class="bf ghost" onclick="gs(2)">← Modifica dati</button>
+  </div>
+</div>
+
+<!-- S4 — FIRMA -->
+<div class="screen" id="s4">
+  <div class="hdr" style="background:#0d47a1">
+    <div class="hdr-icon">✍️</div>
+    <div><div class="hdr-title">Firma qui</div><div class="hdr-sub" id="s4-sub">La firma vale per tutti i documenti</div></div>
+  </div>
+  <div class="steps">
+    <div class="step done"><div class="sdot done">✓</div><div class="slbl">Trasporto</div></div>
+    <div class="step done"><div class="sdot done">✓</div><div class="slbl">Autista</div></div>
+    <div class="step done"><div class="sdot done">✓</div><div class="slbl">Documenti</div></div>
+    <div class="step active"><div class="sdot act">4</div><div class="slbl">Firma</div></div>
+    <div class="step pend"><div class="sdot pend">5</div><div class="slbl">Fine</div></div>
+  </div>
+  <div style="padding:14px 16px;flex:1;display:flex;flex-direction:column">
+    <div class="notice n-info" style="margin-bottom:10px"><span>✍️</span><div>Firma nell'area sotto con il dito o lo stilo. Verrà replicata su tutte le DDT.</div></div>
+    <canvas id="sig-canvas" height="260"></canvas>
+    <p class="sig-hint" id="sig-hint">Firma nell'area sopra</p>
+    <button class="sig-clear" id="sig-clear" onclick="clearSig()">✕ Cancella e rifirma</button>
+  </div>
+  <div class="foot">
+    <button class="bf ok" id="btn-conf" onclick="confirmSig()" disabled>✓ Conferma firma →</button>
+    <button class="bf ghost" onclick="gs(3)">← Indietro</button>
+  </div>
+</div>
+
+<!-- S5 — INVIO -->
+<div class="screen" id="s5">
+  <div class="hdr"><div class="hdr-icon">⏳</div><div><div class="hdr-title">Invio in corso...</div><div class="hdr-sub">Elaborazione firma</div></div></div>
+  <div class="body" style="display:flex;align-items:center;justify-content:center;text-align:center">
+    <div><div class="spinner" style="margin-bottom:20px"></div>
+      <div style="font-size:16px;font-weight:600;color:var(--brand)">Applicazione firma in corso...</div>
+      <div style="font-size:13px;color:var(--mut);margin-top:8px" id="s5-prog">Elaborazione...</div>
+    </div>
+  </div>
+</div>
+
+<!-- S6 — SUCCESSO -->
+<div class="screen" id="s6">
+  <div class="hdr" style="background:var(--ok)"><div class="hdr-icon" style="background:rgba(255,255,255,.2)">✅</div><div><div class="hdr-title">Firma completata!</div><div class="hdr-sub">Puoi ritirare il tablet</div></div></div>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+    <div style="width:72px;height:72px;border-radius:50%;background:var(--okl);border:3px solid var(--okb);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px">✅</div>
+    <div style="text-align:center;font-size:22px;font-weight:700;color:var(--ok);margin-bottom:6px">Firma acquisita con successo</div>
+    <div style="text-align:center;font-size:14px;color:var(--mut);margin-bottom:24px" id="s6-sub"></div>
+    <div class="card" id="s6-summary"></div>
+    <div class="notice n-ok"><span>✓</span><div>I documenti firmati sono stati inviati alla piattaforma DT e sono disponibili per il download SAP.</div></div>
+  </div>
+  <div class="foot"><button class="bf primary" onclick="resetApp()">🔄 Nuovo trasporto</button></div>
+</div>
+
+<script>
+var ST={tr:null,nome:'',cognome:'',targa:'',pickup:'',sig:null};
+
+function gs(n){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById('s'+n);
+  if(el){el.classList.add('active');el.scrollTop=0;}
+  if(n===1)renderS1();
+  if(n===2){var p=document.getElementById('f-pickup');if(p)p.value=ST.pickup||new Date().toLocaleDateString('it-IT');}
+  if(n===3)renderS3();
+  if(n===4)initCanvas();
+  if(n===6)renderS6();
+}
+
+// ── localStorage ─────────────────────────────────────────────────
+function checkLS(){
+  try{
+    var raw=localStorage.getItem('dt_firma_request');
+    if(!raw){setNotice('warn','Nessun trasporto in attesa. Attendi che il desk invii i documenti dal portale.');return;}
+    var d=JSON.parse(raw);
+    if(d.status!=='waiting'){setNotice('warn','Trasporto già elaborato. Attendi un nuovo invio.');return;}
+    ST.tr=d; ST.pickup=d.pickupDate||new Date().toLocaleDateString('it-IT');
+    setNotice('ok','Trovato trasporto <strong>'+d.sapNum+'</strong> — '+d.vett+'<br>'+(d.ddts?d.ddts.length:0)+' DDT · '+d.dest);
+    setTimeout(function(){gs(1);},1000);
+  }catch(e){setNotice('warn','Errore lettura dati. Riprova.');}
+}
+
+function loadDemo(){
+  ST.tr={trId:'TR-2025-0441',sapNum:'0080041234',vett:'BRT SpA',dest:'Ospedale S. Raffaele — Milano',pickupDate:new Date().toLocaleDateString('it-IT'),
+    ddts:[{id:'DDT/2025/0441-1',art:'Sistema Ecografo MyLab X8',qty:1},{id:'DDT/2025/0441-2',art:'Cavi e accessori ecografo',qty:1},{id:'DDT/2025/0441-3',art:'Packing list',qty:1}],
+    status:'waiting'};
+  ST.pickup=ST.tr.pickupDate;
+  gs(1);
+}
+
+function setNotice(type,msg){
+  var cls={ok:'n-ok',warn:'n-warn',info:'n-info'}[type]||'n-info';
+  var icon={ok:'✅',warn:'⚠️',info:'ℹ️'}[type]||'ℹ️';
+  document.getElementById('s0-notice').innerHTML='<div class="notice '+cls+'"><span>'+icon+'</span><div>'+msg+'</div></div>';
+}
+
+// ── STEP 1 ────────────────────────────────────────────────────────
+function renderS1(){
+  var t=ST.tr;if(!t)return;
+  document.getElementById('s1-title').textContent='Trasporto '+t.sapNum;
+  document.getElementById('s1-meta').innerHTML=
+    mi('Nr. Trasporto SAP',t.sapNum)+mi('Vettore',t.vett)+mi('Destinazione',t.dest)+mi('DDT da firmare',(t.ddts?t.ddts.length:0)+' doc.')+mi('Data ritiro',t.pickupDate)+mi('Esaote SpA','DT Platform');
+  document.getElementById('s1-ddts').innerHTML=(t.ddts||[]).map(function(d){
+    return '<div class="ditem"><div class="dic">📄</div><div class="dii"><div class="did">'+d.id+'</div><div class="dis">'+d.art+' · '+d.qty+' pz</div></div><span class="dst pend">Da firmare</span></div>';
+  }).join('');
+}
+
+function mi(l,v){return '<div class="mi"><div class="ml">'+l+'</div><div class="mv">'+v+'</div></div>';}
+
+// ── STEP 2 ────────────────────────────────────────────────────────
+function validateForm(){
+  var n=document.getElementById('f-nome').value.trim();
+  var c=document.getElementById('f-cognome').value.trim();
+  var t=document.getElementById('f-targa').value.trim();
+  if(!n){alert('Inserire il nome');document.getElementById('f-nome').focus();return;}
+  if(!c){alert('Inserire il cognome');document.getElementById('f-cognome').focus();return;}
+  if(!t){alert('Inserire la targa del veicolo');document.getElementById('f-targa').focus();return;}
+  ST.nome=n;ST.cognome=c;ST.targa=t;
+  gs(3);
+}
+
+// ── STEP 3 ────────────────────────────────────────────────────────
+function renderS3(){
+  var t=ST.tr;
+  document.getElementById('s3-sub').textContent=(t.ddts?t.ddts.length:0)+' DDT';
+  document.getElementById('s3-ddts').innerHTML=(t.ddts||[]).map(function(d){
+    return '<div class="ditem"><div class="dic">📄</div><div class="dii"><div class="did">'+d.id+'</div><div class="dis">'+d.art+' · '+d.qty+' pz</div></div><span class="dst pend">In attesa firma</span></div>';
+  }).join('');
+  document.getElementById('s3-riepilogo').innerHTML=
+    mi('Nome',ST.nome)+mi('Cognome',ST.cognome)+mi('Targa',ST.targa)+mi('Pickup date',ST.pickup);
+}
+
+// ── CANVAS SIGNATURE ─────────────────────────────────────────────
+var _cv,_cx,_dr=false,_has=false;
+
+function initCanvas(){
+  _cv=document.getElementById('sig-canvas');
+  _cx=_cv.getContext('2d');
+  var r=_cv.getBoundingClientRect();
+  _cv.width=r.width*(window.devicePixelRatio||1);
+  _cv.height=r.height*(window.devicePixelRatio||1);
+  _cx.scale(window.devicePixelRatio||1,window.devicePixelRatio||1);
+  _cx.strokeStyle='#0d1b2a';_cx.lineWidth=2.8;_cx.lineCap='round';_cx.lineJoin='round';
+  _has=false;_dr=false;
+  _cv.classList.remove('has-sig');
+  document.getElementById('sig-hint').textContent="Firma nell'area sopra";
+  document.getElementById('sig-hint').style.color='';
+  document.getElementById('sig-clear').style.display='none';
+  document.getElementById('btn-conf').disabled=true;
+
+  function gp(e){var r=_cv.getBoundingClientRect();var s=e.touches?e.touches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top};}
+  _cv.onpointerdown=function(e){e.preventDefault();_dr=true;var p=gp(e);_cx.beginPath();_cx.moveTo(p.x,p.y);};
+  _cv.onpointermove=function(e){e.preventDefault();if(!_dr)return;var p=gp(e);_cx.lineTo(p.x,p.y);_cx.stroke();
+    if(!_has){_has=true;_cv.classList.add('has-sig');document.getElementById('sig-hint').textContent='Firma acquisita';document.getElementById('sig-hint').style.color='var(--ok)';document.getElementById('sig-clear').style.display='block';document.getElementById('btn-conf').disabled=false;}};
+  _cv.onpointerup=function(e){e.preventDefault();_dr=false;_cx.beginPath();};
+}
+
+function clearSig(){
+  if(!_cx)return;
+  var r=_cv.getBoundingClientRect();_cx.clearRect(0,0,r.width*2,r.height*2);
+  _has=false;_cv.classList.remove('has-sig');
+  document.getElementById('sig-hint').textContent="Firma nell'area sopra";
+  document.getElementById('sig-hint').style.color='';
+  document.getElementById('sig-clear').style.display='none';
+  document.getElementById('btn-conf').disabled=true;
+}
+
+function confirmSig(){ST.sig=_cv.toDataURL('image/png');gs(5);submitSig();}
+
+// ── SUBMIT ────────────────────────────────────────────────────────
+function submitSig(){
+  var t=ST.tr,tot=(t.ddts?t.ddts.length:0),i=0;
+  var prog=document.getElementById('s5-prog');
+  var iv=setInterval(function(){
+    i++;if(prog)prog.textContent='Applicazione firma su DDT '+i+' di '+tot+'...';
+    if(i>=tot){clearInterval(iv);setTimeout(function(){
+      var res={trId:t.trId||t.sapNum,status:'signed',nome:ST.nome,cognome:ST.cognome,targa:ST.targa,pickup:ST.pickup,timestamp:new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),ddts:(t.ddts||[]).map(function(d){return{id:d.id};}),sigImg:ST.sig};
+      try{localStorage.setItem('dt_firma_response',JSON.stringify(res));}catch(e){}
+      try{var req=JSON.parse(localStorage.getItem('dt_firma_request')||'{}');req.status='done';localStorage.setItem('dt_firma_request',JSON.stringify(req));}catch(e){}
+      gs(6);
+    },600);}
+  },500);
+}
+
+// ── STEP 6 ────────────────────────────────────────────────────────
+function renderS6(){
+  var t=ST.tr;
+  document.getElementById('s6-sub').textContent=(t.ddts?t.ddts.length:0)+' doc. firmati — '+ST.nome+' '+ST.cognome+' · '+ST.targa;
+  var sum='<div class="mgrid">'+[['Nome',ST.nome],['Cognome',ST.cognome],['Targa',ST.targa],['Pickup',ST.pickup],['Trasporto',t.sapNum],['Ora firma',new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})]].map(function(x){return '<div style="background:var(--okl);border-radius:8px;padding:10px 12px"><div style="font-size:10px;color:var(--mut);text-transform:uppercase;margin-bottom:3px">'+x[0]+'</div><div style="font-size:14px;font-weight:700;color:var(--ok)">'+x[1]+'</div></div>';}).join('')+'</div>';
+  if(ST.sig)sum+='<div style="margin-top:14px;text-align:center"><div style="font-size:11px;color:var(--mut);margin-bottom:6px">Firma acquisita</div><img src="'+ST.sig+'" style="max-width:200px;border:1px solid var(--bor);border-radius:8px;background:#fff;padding:8px"></div>';
+  document.getElementById('s6-summary').innerHTML=sum;
+}
+
+function resetApp(){
+  ST={tr:null,nome:'',cognome:'',targa:'',pickup:'',sig:null};
+  ['f-nome','f-cognome','f-targa'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  if(_cx){var r=_cv.getBoundingClientRect();_cx.clearRect(0,0,r.width*2,r.height*2);}
+  setNotice('info','In attesa di un nuovo trasporto dal portale.');
+  gs(0);
+}
+</script>
+</body>
+</html>
