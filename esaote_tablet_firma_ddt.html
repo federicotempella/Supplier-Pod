@@ -16,6 +16,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .hdr-title{font-size:16px;font-weight:700;color:#fff}
 .hdr-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
 .hdr-badge{padding:4px 10px;background:rgba(255,255,255,.15);border-radius:10px;font-size:11px;color:#fff;font-weight:600;margin-left:auto}
+.ddt-expand{display:none;border-top:1px solid var(--bor);padding:14px;background:#f8f9fb}
+.ddt-expand.open{display:block}
+.ddt-item.expandable{cursor:pointer}
+.ddt-chevron{font-size:12px;color:var(--mut);transition:.2s;margin-left:auto}
+.ddt-item.expanded .ddt-chevron{transform:rotate(180deg)}
+.pdf-mini{background:#fff;border:1px solid #ccc;border-radius:6px;padding:16px;font-size:11px;line-height:1.7;font-family:'Courier New',monospace}
+.pdf-mini-hdr{display:flex;justify-content:space-between;border-bottom:2px solid #063d6e;padding-bottom:8px;margin-bottom:12px}
+.pdf-mini-title{font-size:13px;font-weight:700;color:#063d6e;letter-spacing:1px;margin-bottom:10px}
+.pdf-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.pdf-mini-lbl{font-size:9px;text-transform:uppercase;color:#999;margin-bottom:1px}
+.pdf-mini-val{font-size:11px;font-weight:600;color:#222}
+.pdf-mini-tbl{width:100%;border-collapse:collapse;font-size:10px}
+.pdf-mini-tbl th{background:#063d6e;color:#fff;padding:5px 8px;text-align:left}
+.pdf-mini-tbl td{padding:5px 8px;border-bottom:1px solid #eee}
+.pdf-mini-sig{border:2px dashed #c00;border-radius:4px;padding:10px;text-align:center;margin-top:14px;color:#c00;font-size:9px;font-weight:700;letter-spacing:.5px}
 .steps{display:flex;padding:10px 16px;gap:0;background:var(--sur);border-bottom:1px solid var(--bor);flex-shrink:0}
 .step{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
 .step:not(:last-child)::after{content:'';position:absolute;top:12px;left:50%;width:100%;height:2px;background:var(--bor);z-index:0}
@@ -283,11 +298,42 @@ function validateForm(){
 function renderS3(){
   var t=ST.tr;
   document.getElementById('s3-sub').textContent=(t.ddts?t.ddts.length:0)+' DDT';
-  document.getElementById('s3-ddts').innerHTML=(t.ddts||[]).map(function(d){
-    return '<div class="ditem"><div class="dic">📄</div><div class="dii"><div class="did">'+d.id+'</div><div class="dis">'+d.art+' · '+d.qty+' pz</div></div><span class="dst pend">In attesa firma</span></div>';
+  document.getElementById('s3-ddts').innerHTML=(t.ddts||[]).map(function(d,i){
+    return '<div class="ddt-item expandable" id="ditem-'+i+'" onclick="toggleDoc('+i+')">'
+      +'<div class="dic">📄</div>'
+      +'<div class="dii"><div class="did">'+d.id+'</div><div class="dis">'+d.art+' · '+d.qty+' pz</div></div>'
+      +'<span class="dst pend">In attesa firma</span>'
+      +'<span class="ddt-chevron">▼</span>'
+      +'</div>'
+      +'<div class="ddt-expand" id="dexp-'+i+'">'
+      +'<div class="pdf-mini">'
+      +'<div class="pdf-mini-hdr"><span style="font-size:10px;font-weight:700">ESAOTE SpA</span><span style="font-size:9px;color:#666">P.IVA IT00510680100</span></div>'
+      +'<div class="pdf-mini-title">DOCUMENTO DI TRASPORTO</div>'
+      +'<div class="pdf-mini-grid">'
+      +'<div><div class="pdf-mini-lbl">Nr. DDT</div><div class="pdf-mini-val">'+d.id+'</div></div>'
+      +'<div><div class="pdf-mini-lbl">Nr. Trasporto SAP</div><div class="pdf-mini-val">'+(t.sapNum||'—')+'</div></div>'
+      +'<div><div class="pdf-mini-lbl">Data</div><div class="pdf-mini-val">'+ST.pickup+'</div></div>'
+      +'<div><div class="pdf-mini-lbl">Vettore</div><div class="pdf-mini-val">'+(t.vett||'—')+'</div></div>'
+      +'<div><div class="pdf-mini-lbl">Destinatario</div><div class="pdf-mini-val">'+t.dest+'</div></div>'
+      +'<div><div class="pdf-mini-lbl">Resa</div><div class="pdf-mini-val">DAP</div></div>'
+      +'</div>'
+      +'<table class="pdf-mini-tbl"><thead><tr><th>Codice</th><th>Descrizione</th><th>Qtà</th><th>UoM</th></tr></thead>'
+      +'<tbody><tr><td>ESA-'+i+'-001</td><td>'+d.art+'</td><td>'+d.qty+'</td><td>PZ</td></tr></tbody></table>'
+      +'<div class="pdf-mini-sig">CAMPO FIRMA TRASPORTATORE — DA APPORRE DIGITALMENTE</div>'
+      +'</div></div>';
   }).join('');
   document.getElementById('s3-riepilogo').innerHTML=
     mi('Nome',ST.nome)+mi('Cognome',ST.cognome)+mi('Targa',ST.targa)+mi('Pickup date',ST.pickup);
+}
+
+function toggleDoc(i){
+  var item=document.getElementById('ditem-'+i);
+  var exp=document.getElementById('dexp-'+i);
+  var isOpen=exp.classList.contains('open');
+  // close all
+  document.querySelectorAll('.ddt-expand').forEach(function(e){e.classList.remove('open');});
+  document.querySelectorAll('.ddt-item').forEach(function(e){e.classList.remove('expanded');});
+  if(!isOpen){exp.classList.add('open');item.classList.add('expanded');}
 }
 
 // ── CANVAS SIGNATURE ─────────────────────────────────────────────
