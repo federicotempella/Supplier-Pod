@@ -199,7 +199,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="sig-clear" id="sig-clear" onclick="clearSig()">✕ Cancella e rifirma</button>
   </div>
   <div class="foot">
-    <button class="bf ok" id="btn-conf" onclick="confirmSig()" disabled>✓ Conferma firma →</button>
+    <button class="bf ok" id="btn-conf" onclick="confirmSig()" disabled style="display:none">✓ Conferma firma →</button>
+    <button id="btn-conf-float" onclick="confirmSig()" style="display:none;position:fixed;bottom:24px;right:24px;left:24px;z-index:999;padding:18px;background:var(--ok);color:#fff;border:none;border-radius:14px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 6px 24px rgba(26,122,74,.45);align-items:center;justify-content:center;gap:10px">✓ Conferma firma e invia →</button>
+    <p id="sign-prompt" style="text-align:center;font-size:13px;color:var(--mut);padding:4px 0">Firma nell'area sopra per continuare</p>
     <button class="bf ghost" onclick="gs(3)">← Indietro</button>
   </div>
 </div>
@@ -357,7 +359,7 @@ function initCanvas(){
   function gp(e){var r=_cv.getBoundingClientRect();var s=e.touches?e.touches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top};}
   _cv.onpointerdown=function(e){e.preventDefault();_dr=true;var p=gp(e);_cx.beginPath();_cx.moveTo(p.x,p.y);};
   _cv.onpointermove=function(e){e.preventDefault();if(!_dr)return;var p=gp(e);_cx.lineTo(p.x,p.y);_cx.stroke();
-    if(!_has){_has=true;_cv.classList.add('has-sig');document.getElementById('sig-hint').textContent='Firma acquisita';document.getElementById('sig-hint').style.color='var(--ok)';document.getElementById('sig-clear').style.display='block';document.getElementById('btn-conf').disabled=false;}};
+    if(!_has){_has=true;_cv.classList.add('has-sig');document.getElementById('sig-hint').textContent='Firma acquisita ✓';document.getElementById('sig-hint').style.color='var(--ok)';document.getElementById('sig-clear').style.display='block';document.getElementById('btn-conf').disabled=false;document.getElementById('btn-conf').style.display='flex';document.getElementById('btn-conf-float').style.display='flex';var pr=document.getElementById('sign-prompt');if(pr)pr.style.display='none';}};
   _cv.onpointerup=function(e){e.preventDefault();_dr=false;_cx.beginPath();};
 }
 
