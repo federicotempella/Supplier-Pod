@@ -783,8 +783,8 @@ function rConfD(){
         <div class="appr-act"><button class="btn btn-ok">Accetta variazione</button><button class="btn" onclick="openWF('CF-042 — Variazione qta Philips — Escalation SCM')">Avvia workflow</button><button class="btn btn-err">Rifiuta</button></div>
       </div>
     </div>
-    <div class="card"><div class="card-h"><div class="card-title">Email ricevuta — 14/06/2025 11:32</div><span class="ai-module-badge" style="font-size:10px">🤖 AI Module</span></div>
-      <div style="padding:12px 18px;font-size:12px"><div style="padding:6px 14px 0;font-size:11.5px;color:#7b1fa2;background:#f3e5f5;border-top:1px solid #ce93d8">🤖 La lettura del testo email e l'estrazione dei dati richiedono il modulo AI. Senza AI il documento PDF allegato viene processato con ICR standard.</div>
+    <div class="card"><div class="card-h"><div class="card-title">Email ricevuta — 14/06/2025 11:32</div></div>
+      <div style="padding:12px 18px;font-size:12px">
         <div style="margin-bottom:5px"><span style="color:var(--mut);font-size:10px;text-transform:uppercase">Da:</span> <strong>logistics@philips-medical.com</strong></div>
         <div style="background:var(--bg);border-radius:6px;padding:10px;font-size:11.5px;line-height:1.7;margin-top:8px">Dear Ms. Rossi, We confirm PO 4500089089. For MR-PCB-CON-30: <strong>30 units</strong> as requested. For MR-DISP-15-ASM: we can deliver only <strong>2 units</strong> by June 28 — 1 unit available from September (component shortage).<br><br>Best regards — Mindray Sales &amp; Logistics</div>
         <div style="margin-top:8px;display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg);border-radius:6px"><span>📄</span><span style="flex:1;font-size:12px">Order_Confirmation_MR_4500089089.pdf</span><button class="btn btn-sm">Download</button></div>
@@ -1548,10 +1548,10 @@ D.trasporti = [
 ];
 
 D.ddt_firmate = [
-  {id:'DDT/2025/0441-1',trId:'TR-2025-0441',sap:'0080041234',dest:'Ospedale S. Raffaele',art:'Sistema Ecografo MyLab X8',qty:1,autista:'',targa:'',firmata:'',st:'da_firmare'},
+  {id:'DDT/2025/0441-1',trId:'TR-2025-0441',sap:'0080041234',dest:'Ospedale S. Raffaele',art:'Sistema Ecografo MyLab X8',qty:1,autista:'',targa:'',firmata:'',st:'firmata',autista:'Marco Conforti',targa:'MI 234 AB',firmata:'13/06/2025 09:15'},
   {id:'DDT/2025/0440-1',trId:'TR-2025-0440',sap:'0080041233',dest:'Clinica Mater Dei',art:'Sonda US L18-5',qty:2,autista:'Mario Rossi',targa:'AB 123 CD',firmata:'13/06/2025 09:47',st:'firmata'},
   {id:'DDT/2025/0439-1',trId:'TR-2025-0439',sap:'0080041232',dest:'AOU Careggi',art:'Probe Connector PCB',qty:5,autista:'Giuseppe Bianchi',targa:'FI 445 PQ',firmata:'13/06/2025 10:22',st:'firmata'},
-  {id:'DDT/2025/0439-2',trId:'TR-2025-0439',sap:'0080041232',dest:'AOU Careggi',art:'HV PSU Module',qty:2,autista:'',targa:'',firmata:'',st:'da_firmare'},
+  {id:'DDT/2025/0439-2',trId:'TR-2025-0439',sap:'0080041232',dest:'AOU Careggi',art:'HV PSU Module',qty:2,autista:'',targa:'',firmata:'',st:'firmata',autista:'Marco Conforti',targa:'MI 234 AB',firmata:'13/06/2025 09:15'},
   {id:'DDT/2025/0438-1',trId:'TR-2025-0438',sap:'0080041231',dest:'Policlinico Gemelli',art:'RF Amplifier Board',qty:1,autista:'Luca Ferrari',targa:'RM 887 GH',firmata:'12/06/2025 14:38',st:'firmata'},
   {id:'DDT/2025/0438-2',trId:'TR-2025-0438',sap:'0080041231',dest:'Policlinico Gemelli',art:'Display Assembly 15"',qty:3,autista:'Luca Ferrari',targa:'RM 887 GH',firmata:'12/06/2025 14:38',st:'firmata'},
   {id:'DDT/2025/0438-3',trId:'TR-2025-0438',sap:'0080041231',dest:'Policlinico Gemelli',art:'Gradient Coil Assembly',qty:1,autista:'Luca Ferrari',targa:'RM 887 GH',firmata:'12/06/2025 14:38',st:'firmata'},
@@ -2016,21 +2016,24 @@ function startFirmaPolling(trId){
 function rDdtFirmate(){
   function stF(s){return({da_firmare:'<span class="badge info">✍ Da firmare</span>',firmata:'<span class="badge ok">✓ Firmata</span>'})[s]||'<span class="badge grey">'+s+'</span>';}
   return fbar([{type:'text',p:'Nr. DDT, vettore, destinazione...'},{type:'select',lbl:'Stato',opts:['Da firmare','Firmata']},{type:'select',lbl:'Tutti i vettori',opts:D.vettori.map(function(v){return v.name;})},{type:'date',lbl:'Dal'},{type:'date',lbl:'Al'},{type:'clr'},{type:'sp'},{type:'cnt',v:D.ddt_firmate.length}])
-  // bulk bar
   +'<div id="bulk-ddt-f" style="display:none" class="bulk-bar"><span id="ddt-f-cnt" style="font-weight:600">0 selezionate</span><button class="btn btn-sm" onclick="ddtFBulkDownload()">⬇ Download per SAP (ZIP)</button><button class="btn btn-sm" onclick="ddtFSelectNone()">✕ Annulla</button></div>'
-  // header buttons
   +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">'
   +'<button class="btn btn-sm" onclick="showToast(\'Export CSV DDT firmate\')">⬇ CSV</button>'
   +'</div>'
-  +'<div class="card"><table class="tbl"><thead><tr>'
+  +'<div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr>'
   +'<th style="width:36px"><input type="checkbox" class="chk" id="chkf-all" onchange="ddtFSelectAll(this.checked)"></th>'
   +'<th>ID DDT</th><th>Nr. Trasporto SAP</th><th>Destinazione</th><th>Articolo</th><th>Qtà</th><th>Autista</th><th>Targa</th><th>Data firma</th><th>Stato firma</th><th>POD</th><th></th>'
   +'</tr></thead><tbody>'
-  +D.ddt_firmate.map(function(d,idx){
-    var rowId='ddf-'+idx;
-    return '<tr class="tr" onclick="CURRENT_POD_ID=\''+p.id+'\';go(\'pod-d\')" style="cursor:pointer">'
+  +D.ddt_firmate.map(function(d){
+    var pod=D.pod?D.pod.find(function(p){return p.ddtId===d.id;}):null;
+    var podBadge=pod?
+      (pod.st==='consegnato'?'<span class="badge ok" style="font-size:10px">✓ POD</span>':
+       pod.st==='da_abbinare'?'<span class="badge warn" style="font-size:10px">⚠ Da abbinare</span>':
+       '<span class="badge info" style="font-size:10px">⏳ Attesa</span>')
+      :'<span style="color:var(--sub);font-size:12px">—</span>';
+    return '<tr class="tr" style="cursor:pointer" onclick="go(\'trasporto-d\')">'
     +'<td onclick="event.stopPropagation()" style="width:36px"><input type="checkbox" class="chk ddt-f-chk" data-id="'+d.id+'" onchange="ddtFToggle(this)"></td>'
-    +'<td class="mono" style="font-size:11.5px;cursor:pointer" onclick="go(\'trasporto-d\')">'+d.id+'</td>'
+    +'<td class="mono" style="font-size:11.5px">'+d.id+'</td>'
     +'<td class="mono" style="font-size:11.5px">'+d.sap+'</td>'
     +'<td style="font-size:12px">'+d.dest+'</td>'
     +'<td style="font-size:12px;color:var(--mut)">'+d.art+'</td>'
@@ -2039,15 +2042,40 @@ function rDdtFirmate(){
     +'<td class="mono" style="font-size:11.5px">'+(d.targa||'<span style="color:var(--sub)">—</span>')+'</td>'
     +'<td style="font-size:12px">'+(d.firmata||'<span style="color:var(--sub)">—</span>')+'</td>'
     +'<td>'+stF(d.st)+'</td>'
-    +'<td>'+(typeof podStatusBadge==='function'?podStatusBadge(d.id):'<span style="color:var(--sub)">—</span>')+'</td>'
+    +'<td>'+podBadge+'</td>'
     +'<td><div style="display:flex;gap:5px">'
-    +(d.st==='firmata'?'<button class="btn btn-sm" onclick="event.stopPropagation();showToast(\'Download per SAP: '+d.id.replace(/'/g,'')+'\')" style="font-size:10.5px;white-space:nowrap">⬇ SAP</button>':'')
-    +'<a style="font-size:11px;color:var(--acc);cursor:pointer" onclick="event.stopPropagation();go(\'trasporto-d\')">Apri →</a>'
+    +(d.st==='firmata'?'<button class="btn btn-sm" onclick="event.stopPropagation();showToast(\'Download SAP: '+d.id+'\')" style="font-size:10.5px;white-space:nowrap">⬇ SAP</button>':'')
+    +'<a style="font-size:11px;color:var(--acc);cursor:pointer;white-space:nowrap" onclick="event.stopPropagation();go(\'trasporto-d\')">Apri →</a>'
     +'</div></td>'
     +'</tr>';
   }).join('')
   +'</tbody></table></div>'
-  +'<div style="padding:8px 0;font-size:12px;color:var(--mut)">'+D.ddt_firmate.length+' DDT — ultimi 2 giorni</div>';
+  +'<div style="padding:8px 0;font-size:12px;color:var(--mut)">'+D.ddt_firmate.length+' DDT — ultimi 2 giorni</div>'
+  +'</div>'
+  +'</div>';
+}
+
+function ddtfUp(tipo, nome){
+  var grid=document.getElementById('ddtf-upload-grid');
+  var idx=['cmr','ldv','pod'].indexOf(tipo);
+  var slot=grid&&grid.children[idx]?grid.children[idx]:null;
+  if(slot){
+    slot.style.borderColor='var(--ok)';slot.style.background='var(--okl)';
+    slot.innerHTML='<div style="font-size:20px;margin-bottom:5px">✅</div>'
+      +'<div style="font-size:12.5px;font-weight:600;color:var(--ok)">'+nome+'</div>'
+      +'<div style="font-size:11px;color:var(--mut);margin-top:3px">'+nome.replace(/ /g,'_')+'_DDT.pdf</div>';
+  }
+  var ul=document.getElementById('ddtf-uploaded-list');
+  if(ul){
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f2f5f9;font-size:12px';
+    row.innerHTML='<span style="color:var(--ok)">✓</span>'
+      +'<span style="flex:1">'+nome.replace(/ /g,'_')+'_DDT.pdf</span>'
+      +'<span style="font-size:11px;color:var(--mut)">M. Martinis · '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+'</span>'
+      +'<button class="btn btn-sm" onclick="showToast(\'Download '+nome+'\')" style="font-size:10.5px">⬇</button>';
+    ul.appendChild(row);
+  }
+  showToast(nome+' caricato');
 }
 
 
@@ -2671,6 +2699,19 @@ function rPodRecovery(){
     +'</div>'
     +'<div style="margin-top:10px;padding:10px 14px;background:var(--infol);border-radius:8px;font-size:12.5px;color:var(--info)">'
     +'📋 <strong>Fase 2:</strong> integrazione API carrier (BRT, DHL, GLS) per ricezione POD automatica e aggiornamento stato real-time.'
+    +'</div>'
+    +'<div class="card" style="margin-top:14px"><div class="card-h" style="background:var(--brand)">'
+    +'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:18px">📂</span><div class="card-title" style="color:#fff">Carica documenti ricevuti</div></div>'
+    +'<span class="badge" style="background:rgba(255,255,255,.2);color:#fff;font-size:10px">Upload manuale</span>'
+    +'</div>'
+    +'<div style="padding:10px 18px 8px;font-size:12.5px;color:var(--mut);border-bottom:1px solid var(--bor)">Carica CMR, POD o altri documenti ricevuti dai vettori da abbinare alle spedizioni.</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 18px" id="pod-upload-grid">'
+    +'<div class="fasc-slot" onclick="ddtfUp(\'cmr\',\'CMR\')"><div style="font-size:20px;margin-bottom:5px">📄</div><div style="font-size:12.5px;font-weight:600">CMR</div><div style="margin-top:6px"><span class="btn btn-sm" style="font-size:11px;cursor:pointer">⬆ Carica</span></div></div>'
+    +'<div class="fasc-slot" onclick="ddtfUp(\'pod\',\'POD\')"><div style="font-size:20px;margin-bottom:5px">📬</div><div style="font-size:12.5px;font-weight:600">POD</div><div style="margin-top:6px"><span class="btn btn-sm" style="font-size:11px;cursor:pointer">⬆ Carica</span></div></div>'
+    +'<div class="fasc-slot" onclick="ddtfUp(\'altro\',\'Altro documento\')"><div style="font-size:20px;margin-bottom:5px">📎</div><div style="font-size:12.5px;font-weight:600">Altro documento</div><div style="margin-top:6px"><span class="btn btn-sm" style="font-size:11px;cursor:pointer">⬆ Carica</span></div></div>'
+    +'</div>'
+    +'<div id="pod-uploaded-list" style="padding:0 18px 8px"></div>'
+    +'<div style="padding:0 18px 14px"><button class="btn btn-ok btn-sm" onclick="showToast(\'Download ZIP documenti POD & CMR\')">⬇ Download ZIP</button></div>'
     +'</div>';
 }
 
