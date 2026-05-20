@@ -225,6 +225,40 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);font
 
 .fasc-slot{border:2px dashed var(--bor);border-radius:9px;padding:12px;cursor:pointer;transition:.15s;text-align:center}
 .fasc-slot:hover{border-color:var(--acc);background:var(--acl)}
+
+/* ── POD & CMR ─────────────────────────────────────────────────── */
+.adv-filters{display:none;padding:12px 0 4px;border-top:1px solid var(--bor);margin-top:10px}
+.adv-filters.open{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.adv-toggle{background:none;border:none;color:var(--acc);font-size:12px;cursor:pointer;
+  font-family:inherit;padding:4px 0;display:flex;align-items:center;gap:5px}
+.pod-slot{border:2px dashed var(--bor);border-radius:9px;padding:12px 14px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s}
+.pod-slot:hover{border-color:var(--acc);background:var(--acl)}
+.pod-slot.filled{border-color:var(--ok);background:var(--okl);cursor:default}
+.annot-wrap{padding:14px 18px;border-top:1px solid var(--bor)}
+.annot-wrap textarea{width:100%;border:1px solid var(--bor);border-radius:7px;
+  padding:8px 10px;font-size:12px;font-family:inherit;resize:vertical;min-height:70px;outline:none}
+.annot-wrap textarea:focus{border-color:var(--acc)}
+/* ── DOCUMENTI RICEVUTI ─────────────────────────────────────────── */
+.doc-tabs{display:flex;border-bottom:2px solid var(--bor);margin-bottom:0}
+.doc-tab{padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-2px;color:var(--mut);background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.doc-tab.active{color:var(--acc);border-bottom-color:var(--acc);font-weight:600}
+.empty-doc-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:300px;color:var(--mut);gap:12px;background:var(--bg);border-radius:8px}
+.empty-doc-icon{font-size:40px;opacity:.4}
+
+.scost-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;font-size:11.5px;font-weight:600}
+.scost-ok{background:var(--okl);color:var(--ok)}
+.scost-warn{background:#fff8e1;color:#f57c00}
+.scost-err{background:var(--errl);color:var(--err)}
+.scost-bar-wrap{height:6px;background:var(--bor);border-radius:3px;margin-top:4px;overflow:hidden}
+.scost-bar{height:6px;border-radius:3px;transition:.3s}
+.ai-module-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#f3e5f5;border:1px solid #ce93d8;border-radius:8px;font-size:11px;font-weight:600;color:#7b1fa2}
+.tr-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.tr-kpi{background:var(--sur);border-radius:10px;padding:12px 14px;border:1px solid var(--bor);text-align:center}
+.tr-kpi-val{font-size:22px;font-weight:700;margin:4px 0}
+.tr-kpi-lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
 </style>
 </head>
 <body>
@@ -237,15 +271,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);font
   <div class="sbi" id="sbi-oda-l" onclick="go('oda-l')"><span>&#128203;</span> Ordini di Acquisto<span class="sbi-badge">3</span></div>
   <div class="sbi" id="sbi-conf-l" onclick="go('conf-l')"><span>&#9993;&#65039;</span> Conferme Ordine<span class="sbi-badge">2</span></div>
   <div class="sbi" id="sbi-ddt-l" onclick="go('ddt-l')"><span>&#128230;</span> DDT Inbound</div>
+  <div class="sbi" id="sbi-scostamenti" onclick="go('scostamenti')"><span>&#128202;</span> Scostamenti</div>
   <div class="sbi" id="sbi-pb-l" onclick="go('pb-l')"><span>&#129534;</span> Pre-Billing<span class="sbi-badge">1</span></div>
   <div class="sb-sec">Ciclo Attivo</div>
   <div class="sbi" id="sbi-trasporti" onclick="go('trasporti')"><span>🚛</span> Trasporti<span class="sbi-badge" style="background:#7b1fa2">4</span></div>
   <div class="sbi" id="sbi-firma-ddt" onclick="go('firma-ddt')"><span>✍️</span> Firma DDT (desk)</div>
   <div class="sbi" id="sbi-ddt-firmate" onclick="go('ddt-firmate')"><span>📋</span> DDT Firmate</div>
-  <div class="sbi" id="sbi-pod-recovery" onclick="go('pod-recovery')"><span>📬</span> POD Recovery<span class="sbi-badge">1</span></div>
+  <div class="sbi" id="sbi-pod-recovery" onclick="go('pod-recovery')"><span>📬</span> POD &amp; CMR<span class="sbi-badge">3</span></div>
   <div class="sb-sec">Vettori</div>
   <div class="sbi" id="sbi-vettori" onclick="go('vettori')"><span>🚚</span> Anagrafica Vettori</div>
   <div class="sbi" id="sbi-log-rice" onclick="go('log-rice')"><span>📡</span> Log Ricezione</div>
+  <div class="sbi" id="sbi-doc-ricevuti" onclick="go('doc-ricevuti')"><span>📥</span> Documenti Ricevuti<span class="sbi-badge">3</span></div>
   <div class="sb-sec">Gestione</div>
   <div class="sbi" id="sbi-workflows" onclick="go('workflows')"><span>⚡</span> Workflow<span class="sbi-badge" style="background:#7b1fa2">3</span></div>
   <div class="sbi" id="sbi-archive" onclick="go('archive')"><span>&#128452;&#65039;</span> Archivio</div>
@@ -341,7 +377,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);font
       <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
         <li style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="color:#4fc3f7;font-weight:700">&#10003;</span>Gestione ODA e Conferme ordine</li>
         <li style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="color:#4fc3f7;font-weight:700">&#10003;</span>DDT Inbound con ICR automatico</li>
-        <li style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="color:#4fc3f7;font-weight:700">&#10003;</span>Pre-Billing e 3-way match</li>
+        <li style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="color:#4fc3f7;font-weight:700">&#10003;</span>Pre-Billing e riconciliazione fatture</li>
         <li style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="color:#4fc3f7;font-weight:700">&#10003;</span>Workflow approvativo e audit trail</li>
         <li style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="color:#4fc3f7;font-weight:700">&#10003;</span>Archivio e conservazione documenti</li>
       </ul>
@@ -432,13 +468,13 @@ const D={
 };
 // --- ROUTER ---
 const bI={'dashboard':0,'oda-l':1,'oda-d':1,'conf-l':2,'conf-d':2,'ddt-l':3,'ddt-d':3,'pb-l':4,'pb-d':4,'archive':5,'sup-l':6,'sup-d':6,'sup-imp':6,'users':7,'log':8,'report':9};
-const TT={'dashboard':'Dashboard','oda-l':'Ordini di Acquisto','oda-d':'ODA 4500089156 — Philips Medical Systems','conf-l':'Conferme Ordine','conf-d':'Conferma CF-042','ddt-l':'DDT Inbound','ddt-d':'DDT DDT-118','pb-l':'Pre-Billing','pb-d':'Pre-Billing PB-041','archive':'Archivio','sup-l':'Fornitori','sup-d':'Dettaglio Fornitore — Philips Medical Systems','sup-imp':'Importa Fornitori','users':'Amministrazione utenti','log':'Log Flussi','report':'Report & Export','settings':'Impostazioni','trasporti':'Trasporti','firma-ddt':'Firma DDT — Desk','ddt-firmate':'DDT Firmate','pod-recovery':'POD Recovery','pod-d':'POD — Dettaglio','trasporto-d':'Trasporto — Dettaglio','vettori':'Anagrafica Vettori','vettore-d':'Vettore — Dettaglio','log-rice':'Log Ricezione Flussi'};
+const TT={'dashboard':'Dashboard','oda-l':'Ordini di Acquisto','oda-d':'ODA 4500089156 — Philips Medical Systems','conf-l':'Conferme Ordine','conf-d':'Conferma CF-042','ddt-l':'DDT Inbound','ddt-d':'DDT DDT-118','pb-l':'Pre-Billing','pb-d':'Pre-Billing PB-041','archive':'Archivio','scostamenti':'Scostamenti Quantità','sup-l':'Fornitori','sup-d':'Dettaglio Fornitore — Philips Medical Systems','sup-imp':'Importa Fornitori','users':'Amministrazione utenti','log':'Log Flussi','report':'Report & Export','settings':'Impostazioni','trasporti':'Trasporti','firma-ddt':'Firma DDT — Desk','ddt-firmate':'DDT Firmate','pod-recovery':'POD & CMR','doc-ricevuti':'Documenti Ricevuti','doc-ricevuti-d':'Documento Ricevuto — Dettaglio','pod-d':'POD — Dettaglio','trasporto-d':'Trasporto — Dettaglio','vettori':'Anagrafica Vettori','vettore-d':'Vettore — Dettaglio','log-rice':'Log Ricezione Flussi'};
 function go(p){
   document.getElementById('tbtitle').textContent=TT[p]||p;
   document.querySelectorAll('.sbi').forEach(e=>e.classList.remove('on'));
   const s=document.getElementById('sbi-'+p);if(s)s.classList.add('on');
   document.querySelectorAll('.bp').forEach((b,i)=>b.classList.toggle('on',i===(bI[p]||0)));
-  const R={'dashboard':rDash,'oda-l':rOdaL,'oda-d':rOdaD,'conf-l':rConfL,'conf-d':rConfD,'ddt-l':rDdtL,'ddt-d':rDdtD,'pb-l':rPbL,'pb-d':rPbD,'archive':rArchive,'workflows':rWorkflows,'sup-l':rSupL,'sup-d':rSupD,'sup-imp':rSupImp,'users':rUsers,'log':rLog,'report':rReport,'trasporti':rTrasporti,'firma-ddt':rFirmaDdt,'ddt-firmate':rDdtFirmate,'pod-recovery':rPodRecovery,'pod-d':rPodD,'trasporto-d':rTrasportoD,'vettori':rVettori,'vettore-d':rVettoreD,'log-rice':rLogRice};
+  const R={'dashboard':rDash,'oda-l':rOdaL,'oda-d':rOdaD,'conf-l':rConfL,'conf-d':rConfD,'ddt-l':rDdtL,'ddt-d':rDdtD,'pb-l':rPbL,'pb-d':rPbD,'archive':rArchive,'scostamenti':rScostamenti,'workflows':rWorkflows,'sup-l':rSupL,'sup-d':rSupD,'sup-imp':rSupImp,'users':rUsers,'log':rLog,'report':rReport,'trasporti':rTrasporti,'firma-ddt':rFirmaDdt,'ddt-firmate':rDdtFirmate,'pod-recovery':rPodRecovery,'doc-ricevuti':rDocRicevuti,'doc-ricevuti-d':rDocRicevutiD,'pod-d':rPodD,'trasporto-d':rTrasportoD,'vettori':rVettori,'vettore-d':rVettoreD,'log-rice':rLogRice};
   document.getElementById('content').innerHTML=(R[p]||(() => '<p style="padding:20px;color:var(--mut)">In costruzione</p>'))();
   setTimeout(()=>setupBulks(p),80);
 }
@@ -650,6 +686,42 @@ function rDash(){
     </div>
   </div>
 `;}
+  // ── Widget Copertura POD per corriere ──
+  +'<div class="card" style="margin-top:0">'
+  +'<div class="card-h">'
+  +'<div class="card-title">📊 Copertura POD per corriere</div>'
+  +'<div style="display:flex;align-items:center;gap:8px">'
+  +'<select class="fsel" style="font-size:11px;padding:4px 8px"><option>2025</option><option>2024</option></select>'
+  +'<select class="fsel" style="font-size:11px;padding:4px 8px"><option>Giugno</option><option>Maggio</option><option>Aprile</option></select>'
+  +'<button class="btn btn-sm" onclick="showToast(\'Export CSV Copertura POD\')">⬇ CSV</button>'
+  +'<a onclick="go(\'pod-recovery\')" style="font-size:12px;color:var(--acc);cursor:pointer;white-space:nowrap">Vedi POD &amp; CMR →</a>'
+  +'</div></div>'
+  +'<div style="overflow-x:auto">'
+  +'<table class="tbl"><thead><tr><th>Anno</th><th>Mese</th><th>Cod. Corriere</th><th>Descr. Corriere</th><th>Attesi</th><th>Ricevuti</th><th>% Copertura</th></tr></thead><tbody>'
+  +[["2025","Giugno","0000870476","GLS Italy Srl",12,10,"83%"],
+    ["2025","Giugno","0000345012","DHL Express Italy",8,8,"100%"],
+    ["2025","Giugno","0000198734","BRT Corriere Espresso",18,14,"78%"],
+    ["2025","Giugno","0000567891","TNT Italy Srl",5,3,"60%"],
+    ["2025","Giugno","0000234567","DB Schenker Italia",6,6,"100%"],
+    ["2025","Giugno","0000789012","Fercam SpA",4,3,"75%"],
+    ["2025","Maggio","0000870476","GLS Italy Srl",14,14,"100%"],
+    ["2025","Maggio","0000345012","DHL Express Italy",9,8,"89%"],
+    ["2025","Maggio","0000198734","BRT Corriere Espresso",20,17,"85%"],
+  ].map(function(r){
+    var pct=parseInt(r[6]);
+    var col=pct>=90?'var(--ok)':pct>=70?'#f57c00':'var(--err)';
+    return '<tr style="cursor:default"><td style="font-size:12px">'+r[0]+'</td><td style="font-size:12px">'+r[1]+'</td>'
+      +'<td class="mono" style="font-size:11.5px">'+r[2]+'</td>'
+      +'<td style="font-size:12px">'+r[3]+'</td>'
+      +'<td style="text-align:center;font-weight:600">'+r[4]+'</td>'
+      +'<td style="text-align:center;font-weight:600">'+r[5]+'</td>'
+      +'<td><span style="font-weight:700;color:'+col+'">'+r[6]+'</span>'
+      +'<div style="height:4px;background:var(--bor);border-radius:2px;margin-top:4px;width:60px">'
+      +'<div style="height:4px;background:'+col+';border-radius:2px;width:'+pct+'%"></div>'
+      +'</div></td></tr>';
+  }).join('')
+  +'</tbody></table></div></div>'
+
 // --- ODA LIST ---
 function rOdaL(){return`${fbar([{type:'text',p:'Nr. ODA, fornitore, articolo...'},{type:'select',lbl:'Tutti i fornitori',opts:D.sup.map(s=>s.name)},{type:'select',lbl:'Tutti i buyer',opts:['M. Martinis','S. Rossi']},{type:'select',lbl:'Tutti gli stati',opts:['Attesa conf.','Variazione','DDT ricevuto','Anomalia','Chiuso']},{type:'select',lbl:'Archivio',opts:['Archiviato','Da archiviare']},{type:'date',lbl:'Dal'},{type:'date',lbl:'Al'},{type:'clr'},{type:'sp'},{type:'cnt',v:D.oda.length}])}\n${bbar('oda',`<button class="btn btn-sm" onclick="openWF('ODA selezionati')">Workflow</button>`)}\n<div class="card"><table class="tbl" id="tbl-oda"><thead><tr><th><input type="checkbox" class="chkr" id="tall-oda"></th><th>Nr. ODA SAP</th><th>Fornitore</th><th>Articolo</th><th>Qtà</th><th>Importo</th><th>Consegna</th><th>Buyer</th><th>Stato</th><th>Workflow</th><th>Archivio</th><th></th></tr></thead><tbody>${D.oda.map((o,i)=>`<tr class="tr" onclick="go('oda-d')"><td onclick="event.stopPropagation()"><input type="checkbox" class="chkr"></td><td class="mono">${o.sap}</td><td style="font-weight:500">${o.sup}</td><td style="font-size:12px;color:var(--mut)">${o.art}</td><td>${o.qty} pz</td><td style="font-weight:600">${fmt(o.amt)}</td><td style="font-size:12px">${o.del}</td><td style="font-size:12px">${o.buyer}</td><td>${sb(o.st)}</td><td>${wfBadge(o.id)}</td><td>${sb(o.archived?'archiviato':'da_archiviare')}</td><td><a style="font-size:11px;color:var(--acc);cursor:pointer" onclick="event.stopPropagation();go('oda-d')">Apri</a></td></tr>`).join('')}</tbody></table></div><div class="pager"><span>${D.oda.length} di 31 ordini</span><div style="display:flex;gap:6px"><button class="btn btn-sm">Prec</button><button class="btn btn-sm btn-p">Succ</button></div></div>`;}
 // --- ODA DETAIL ---
@@ -693,6 +765,8 @@ function rConfD(){
   return`<div class="bc"><a onclick="go('conf-l')">Conferme Ordine</a><span class="bc-sep">›</span><span class="mono">CF-043</span>${sb('variazione')}<div style="margin-left:auto;display:flex;gap:8px"><button class="btn btn-sm" onclick="alert('Export CSV per SAP')">CSV SAP</button><button class="btn btn-sm" onclick="openWF('Conferma CF-043 — Mindray Medical')">Workflow</button><button class="btn btn-sm btn-p">Valida variazione</button></div></div>
   ${chain('conf',[{k:'oda',ic:'📋',lbl:'Ordine collegato',ref:'ODA 4500089089',b:'ddt',page:'oda-d'},{k:'conf',ic:'📬',lbl:'Conferma (attiva)',ref:'CF-043',b:null,page:null},{k:'ddt',ic:'📦',lbl:'DDT Inbound',ref:'DDT-118',b:'transito',page:'ddt-d'},{k:'ft',ic:'🧾',lbl:'Pre-Billing',ref:'PB-041',b:'da_validare',page:'pb-d'}])}
   <div class="split"><div class="split-l">
+    <div style="margin-bottom:8px"><span class="ai-module-badge">&#129302; AI Module &mdash; Estrazione testo email</span></div>
+    <div style="padding:8px 12px;background:#f3e5f5;border:1px solid #ce93d8;border-radius:7px;font-size:12px;color:#7b1fa2;margin-bottom:10px">Questa sezione utilizza l'AI per leggere il testo dell'email di conferma. Richiede il modulo AI attivo.</div>
     <div class="icr-block"><div class="icr-h"><div class="icr-ht">Dati estratti ICR — Conferma Ordine</div><div class="icr-sc"><div class="icr-bar"><div class="icr-bf" style="width:94%;background:var(--ok)"></div></div><span class="cf h">94%</span></div></div>
       ${[['Nr. ODA riferimento','4500089089',99],['Data conferma','13/06/2025',99],['Fornitore','Mindray Medical Intl.',98],['Email mittente','orders@mindray.com',97],['Tipo risposta','Parziale con variazione',94],['Nr. righe','2 di 2',88]].map(([l,v,c])=>`<div class="icr-f"><div class="icr-l">${l}</div><input class="icr-i ${cc(c)}" value="${v}"><span>${cn(c)}</span></div>`).join('')}
     </div>
@@ -709,8 +783,8 @@ function rConfD(){
         <div class="appr-act"><button class="btn btn-ok">Accetta variazione</button><button class="btn" onclick="openWF('CF-042 — Variazione qta Philips — Escalation SCM')">Avvia workflow</button><button class="btn btn-err">Rifiuta</button></div>
       </div>
     </div>
-    <div class="card"><div class="card-h"><div class="card-title">Email ricevuta — 14/06/2025 11:32</div></div>
-      <div style="padding:12px 18px;font-size:12px">
+    <div class="card"><div class="card-h"><div class="card-title">Email ricevuta — 14/06/2025 11:32</div><span class="ai-module-badge" style="font-size:10px">🤖 AI Module</span></div>
+      <div style="padding:12px 18px;font-size:12px"><div style="padding:6px 14px 0;font-size:11.5px;color:#7b1fa2;background:#f3e5f5;border-top:1px solid #ce93d8">🤖 La lettura del testo email e l'estrazione dei dati richiedono il modulo AI. Senza AI il documento PDF allegato viene processato con ICR standard.</div>
         <div style="margin-bottom:5px"><span style="color:var(--mut);font-size:10px;text-transform:uppercase">Da:</span> <strong>logistics@philips-medical.com</strong></div>
         <div style="background:var(--bg);border-radius:6px;padding:10px;font-size:11.5px;line-height:1.7;margin-top:8px">Dear Ms. Rossi, We confirm PO 4500089089. For MR-PCB-CON-30: <strong>30 units</strong> as requested. For MR-DISP-15-ASM: we can deliver only <strong>2 units</strong> by June 28 — 1 unit available from September (component shortage).<br><br>Best regards — Mindray Sales &amp; Logistics</div>
         <div style="margin-top:8px;display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg);border-radius:6px"><span>📄</span><span style="flex:1;font-size:12px">Order_Confirmation_MR_4500089089.pdf</span><button class="btn btn-sm">Download</button></div>
@@ -735,15 +809,17 @@ function rDdtD(){
       ${[['Nr. DDT fornitore','DDT/2025/00847',97],['Data spedizione','12/06/2025',98],['Fornitore','Mindray Medical Intl.',99],['ODA abbinato','4500089089',99],['Consegna stimata','28/06/2025',85],['Vettore','BRT SpA',78],['Nr. LDV','8847202',82],['Nr. colli','3',91],['Peso lordo','5.1 kg',88],['Peso netto','4.2 kg',86]].map(([l,v,c])=>`<div class="icr-f"><div class="icr-l">${l}</div><input class="icr-i ${cc(c)}" value="${v}"><span>${cn(c)}</span></div>`).join('')}
     </div>
     <div class="card"><div class="card-h"><div class="card-title">Righe DDT — clicca per evidenziare nel PDF</div></div>
-      <table class="tbl"><thead><tr><th>Cod. Art.</th><th>Descrizione</th><th>Qta DDT</th><th>Qta ODA conf.</th><th>Lotto</th><th>Peso</th><th>Match</th></tr></thead>
+      <table class="tbl"><thead><tr><th>Cod. Art.</th><th>Descrizione</th><th>Qtà DDT</th><th>Qtà ODA conf.</th><th>Copertura</th><th>Lotto</th><th>Peso</th><th>Match</th></tr></thead>
       <tbody>
-        <tr class="tr" id="tr-0" onclick="hlR(0)"><td class="mono">MR-PCB-CON-30</td><td>Probe Connector PCB</td><td style="font-weight:600">30 pz</td><td>30 pz (ODA pos. 00010)</td><td class="mono">LOT-2025-0441</td><td>4.2 kg</td><td>${sb('ok')}</td></tr>
+        <tr class="tr" id="tr-0" onclick="hlR(0)"><td class="mono">MR-PCB-CON-30</td><td>Probe Connector PCB</td><td style="font-weight:600">30 pz</td><td>30 pz (ODA pos. 00010)</td><td><span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:600;background:var(--okl);color:var(--ok)">&#10003; Totale</span><div style="font-size:10px;color:var(--mut);margin-top:2px">30/30 pz</div></td><td class="mono">LOT-2025-0441</td><td>4.2 kg</td><td>${sb('ok')}</td></tr>
       </tbody></table>
-      <div style="padding:9px 18px;background:#f5f8fc;border-top:1px solid var(--bor);font-size:12px;color:var(--mut)"><strong>Nota:</strong> MR-DISP-15-ASM (pos. 00020, 2 pz) non incluso in questa spedizione — DDT separato atteso per settembre 2025.</div>
+      <div style="padding:9px 18px;background:#fff8e1;border-top:1px solid var(--bor);font-size:12px;color:var(--warn);display:flex;align-items:center;gap:10px"><span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:600;background:#fff8e1;color:#f57c00;border:1px solid #ffe082;white-space:nowrap">&#9684; Parziale</span><span><strong>MR-DISP-15-ASM</strong> (pos. 00020): 0/2 pz ricevuti — DDT separato atteso settembre 2025</span></div>
     </div>
     <div class="card"><div class="card-h"><div class="card-title">Conferma Ricezione Merce</div><span style="font-size:11px;color:var(--mut)">Fase 1 — EM SAP manuale</span></div>
       <div style="padding:14px 18px">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:9px 12px;background:#fff8e1;border-radius:7px;border:1px solid #ffe082"><span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;font-size:11.5px;font-weight:600;background:#fff8e1;color:#f57c00;border:1px solid #ffe082">&#9684; Consegna parziale</span><span style="font-size:12.5px;color:#f57c00">30/32 pz ricevuti — MR-DISP-15-ASM (2 pz) non incluso in questa spedizione</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+          <div><div style="font-size:10.5px;color:var(--mut);margin-bottom:4px">Qtà ricevuta effettiva</div><input class="icr-i" id="ddt-qta-ric" value="30" style="width:100%;font-weight:600"></div>
           <div><div style="font-size:10.5px;color:var(--mut);margin-bottom:4px">Data ricezione effettiva</div><input type="date" class="icr-i" style="width:100%"></div>
           <div><div style="font-size:10.5px;color:var(--mut);margin-bottom:4px">Nr. EM SAP</div><input class="icr-i" placeholder="Es. 5000012345" style="width:100%"></div>
         </div>
@@ -796,7 +872,7 @@ function rPbD(){
     +'</div>'
 
     // 3-way match
-    +'<div class="card"><div class="card-h"><div class="card-title">3-Way Match PO — DDT — Fattura</div></div>'
+    +'<div class="card"><div class="card-h"><div class="card-title">Riconciliazione Ordine — DDT — Fattura</div></div>'
     +'<div style="padding:14px 18px">'
     +'<div class="match-row">'
     +'<div class="match-cell"><div class="match-lbl">ODA pos.00010 confermato</div><div class="match-val">EUR 4.200,00</div><div style="font-size:11px;color:var(--mut);margin-top:2px">30 pz × EUR 140,00</div></div>'
@@ -813,11 +889,11 @@ function rPbD(){
     +'<span id="pb-post-status" class="badge grey" style="font-size:10.5px">Da postare</span>'
     +'</div>'
     +'<div style="padding:14px 18px">'
-    +'<p style="font-size:12.5px;color:var(--mut);margin-bottom:12px">Dopo approvazione Finance, inserire manualmente il 3-way match in SAP. Spuntare per registrare l&#39;avvenuto posting.</p>'
+    +'<p style="font-size:12.5px;color:var(--mut);margin-bottom:12px">Dopo approvazione Finance, inserire manualmente la riconciliazione in SAP. Spuntare per registrare l&#39;avvenuto posting.</p>'
     +'<label id="pb-post-lbl" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--bor);border-radius:8px;cursor:pointer;transition:.15s">'
     +'<input type="checkbox" id="pb-post-chk" style="width:18px;height:18px;accent-color:var(--ok);cursor:pointer;flex-shrink:0" onchange="pbDoPost(this)">'
     +'<div>'
-    +'<div style="font-size:13px;font-weight:600" id="pb-post-chk-lbl">Conferma posting in SAP (3-way match inserito manualmente)</div>'
+    +'<div style="font-size:13px;font-weight:600" id="pb-post-chk-lbl">Conferma posting in SAP (inserito manualmente)</div>'
     +'<div style="font-size:11.5px;color:var(--mut);margin-top:2px">ODA 4500089089 · MR-PCB-CON-30 · 30 pz · DDT-118 · EUR 4.830,00</div>'
     +'</div></label>'
     +'<div id="pb-post-ts" style="display:none;margin-top:10px;padding:9px 12px;background:var(--okl);border-radius:7px;border:1px solid var(--okb);font-size:12px;color:var(--ok)"></div>'
@@ -866,7 +942,7 @@ function rPbD(){
     +'<span style="font-size:14px;font-weight:700;color:var(--acc)">TOTALE: EUR 5.892,60</span>'
     +'</div>'
     +'<div style="padding:9px 18px 12px;background:var(--infol);border-top:1px solid var(--infob);font-size:12px;color:var(--info)">'
-    +'📋 <strong>Posting SAP (Fase 1 — manuale):</strong> dopo approvazione, inserire il 3-way match in SAP manualmente. Spuntare la casella "Postata" sulla riga per registrare l\'avvenuto posting.'
+    +'📋 <strong>Posting SAP (Fase 1 — manuale):</strong> dopo approvazione, inserire la riconciliazione in SAP manualmente. Spuntare la casella "Postata" sulla riga per registrare l\'avvenuto posting.'
     +'</div></div>'
 
     // Approvazione Finance card
@@ -965,7 +1041,7 @@ function openMassPostingModal(){
     +'<button class="modal-close" onclick="document.getElementById(\'mass-post-ov\').remove()">&#10005;</button></div>'
     +'<div class="modal-body">'
     +'<div style="padding:10px 12px;background:var(--infol);border:1px solid var(--infob);border-radius:7px;font-size:12.5px;color:var(--info);margin-bottom:14px">'
-    +'Stai confermando che il 3-way match &egrave; stato inserito in SAP per <strong>'+nonPosted+' documento/i</strong>. Lo stato passer&agrave; a <strong>Postata SAP</strong>.'
+    +'Stai confermando che la riconciliazione &egrave; stata inserita in SAP per <strong>'+nonPosted+' documento/i</strong>. Lo stato passer&agrave; a <strong>Postata SAP</strong>.'
     +'</div>'
     +'<table class="tbl" style="margin-bottom:14px"><thead><tr><th>ID</th><th>Fornitore</th><th>Importo</th><th>Stato attuale</th></tr></thead>'
     +'<tbody>'+rows+'</tbody></table>'
@@ -1509,7 +1585,36 @@ function rTrasporti(){
   function stBadge(s){
     return({da_firmare:'<span class="badge info">✍ Da firmare</span>',firmato:'<span class="badge ok">✓ Firmato</span>',parziale:'<span class="badge warn">◑ Parziale</span>',anomalia:'<span class="badge err">✗ Anomalia</span>'})[s]||'<span class="badge grey">'+s+'</span>';
   }
-  return fbar([{type:'text',p:'Nr. trasporto, vettore, destinazione...'},{type:'select',lbl:'Tutti i vettori',opts:D.vettori.map(function(v){return v.name;})},{type:'select',lbl:'Stato',opts:['Da firmare','Firmato','Parziale','Anomalia']},{type:'date',lbl:'Dal'},{type:'date',lbl:'Al'},{type:'clr'},{type:'sp'},{type:'cnt',v:D.trasporti.length}])
+  var trs=D.trasporti;
+  var tFirm=trs.filter(function(t){return t.st==='firmato';}).length;
+  var tDaF=trs.filter(function(t){return t.st==='da_firmare';}).length;
+  var tAnom=trs.filter(function(t){return t.st==='anomalia';}).length;
+  var vStats=D.vettori.map(function(v){
+    var vt=trs.filter(function(t){return t.vettId===v.id;});
+    var vf=vt.filter(function(t){return t.st==='firmato';}).length;
+    return {n:v.name,tot:vt.length,firm:vf,pct:vt.length>0?Math.round(vf/vt.length*100):0};
+  }).filter(function(v){return v.tot>0;});
+  return '<div class="tr-kpi-row">'
+    +'<div class="tr-kpi"><div class="tr-kpi-lbl">Totale oggi</div><div class="tr-kpi-val" style="color:var(--acc)">'+trs.length+'</div></div>'
+    +'<div class="tr-kpi"><div class="tr-kpi-lbl">Firmati</div><div class="tr-kpi-val" style="color:var(--ok)">'+tFirm+'</div></div>'
+    +'<div class="tr-kpi"><div class="tr-kpi-lbl">Da firmare</div><div class="tr-kpi-val" style="color:#1565c0">'+tDaF+'</div></div>'
+    +'<div class="tr-kpi"><div class="tr-kpi-lbl">Anomalie</div><div class="tr-kpi-val" style="color:var(--err)">'+tAnom+'</div></div>'
+    +'<div class="tr-kpi"><div class="tr-kpi-lbl">Copertura firma</div><div class="tr-kpi-val" style="color:var(--ok)">'+Math.round(tFirm/Math.max(trs.length,1)*100)+'%</div></div>'
+    +'</div>'
+    +'<div class="card" style="margin-bottom:14px"><div class="card-h"><div class="card-title">Per vettore — oggi</div></div>'
+    +'<div style="padding:12px 18px;display:flex;gap:16px;flex-wrap:wrap">'
+    +vStats.map(function(v){
+      var col=v.pct>=100?'var(--ok)':v.pct>=50?'#f57c00':'var(--err)';
+      return '<div style="text-align:center;padding:10px 14px;background:var(--bg);border-radius:9px;min-width:120px">'
+        +'<div style="font-size:12px;font-weight:600;margin-bottom:6px">'+v.n+'</div>'
+        +'<div style="font-size:22px;font-weight:700;color:'+col+'">'+v.firm+'/'+v.tot+'</div>'
+        +'<div style="font-size:10.5px;color:var(--mut);margin:2px 0">firmati</div>'
+        +'<div class="scost-bar-wrap"><div class="scost-bar" style="width:'+v.pct+'%;background:'+col+'"></div></div>'
+        +'<div style="font-size:10.5px;color:'+col+';font-weight:600;margin-top:3px">'+v.pct+'%</div>'
+        +'</div>';
+    }).join('')
+    +'</div></div>'
+    +fbar([{type:'text',p:'Nr. trasporto, vettore, destinazione...'},{type:'select',lbl:'Tutti i vettori',opts:D.vettori.map(function(v){return v.name;})},{type:'select',lbl:'Stato',opts:['Da firmare','Firmato','Parziale','Anomalia']},{type:'date',lbl:'Dal'},{type:'date',lbl:'Al'},{type:'clr'},{type:'sp'},{type:'cnt',v:D.trasporti.length}])
   + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
   + '<div style="display:flex;gap:8px">'
   + '<button class="btn btn-sm btn-p" onclick="go(\'firma-ddt\')">✍ Firma DDT (desk)</button>'
@@ -1656,6 +1761,13 @@ function rTrasportoD(){
   +'<div style="font-size:12.5px;font-weight:600">Buono ritiro</div>'
   +'<div style="margin-top:4px"><span class="badge grey" style="font-size:10px">Opzionale</span></div>'
   +'<div style="margin-top:8px"><span class="btn btn-sm" style="font-size:11px;display:inline-block;cursor:pointer">⬆ Carica</span></div>'
+  +'</div>'
+  +'<div id="fsl-pod-man" class="fasc-slot" onclick="fascUp(\'pod-man\',\'POD — Prova di consegna\')" style="grid-column:span 2">'
+  +'<div style="font-size:20px;margin-bottom:5px">📬</div>'
+  +'<div style="font-size:12.5px;font-weight:600">POD — Prova di consegna</div>'
+  +'<div style="font-size:11.5px;color:var(--mut);margin-top:2px">Carica manualmente se non ricevuta dal vettore</div>'
+  +'<div style="margin-top:4px"><span class="badge grey" style="font-size:10px">Opzionale</span></div>'
+  +'<div style="margin-top:8px"><span class="btn btn-sm" style="font-size:11px;display:inline-block;cursor:pointer">⬆ Carica POD</span></div>'
   +'</div>'
   +'</div>'
   +'<div id="fasc-uploaded-list" style="padding:0 18px 8px"></div>'
@@ -1927,7 +2039,7 @@ function rDdtFirmate(){
     +'<td class="mono" style="font-size:11.5px">'+(d.targa||'<span style="color:var(--sub)">—</span>')+'</td>'
     +'<td style="font-size:12px">'+(d.firmata||'<span style="color:var(--sub)">—</span>')+'</td>'
     +'<td>'+stF(d.st)+'</td>'
-    +'<td>'+podStatusBadge(d.id)+'</td>'
+    +'<td>'+(typeof podStatusBadge==='function'?podStatusBadge(d.id):'<span style="color:var(--sub)">—</span>')+'</td>'
     +'<td><div style="display:flex;gap:5px">'
     +(d.st==='firmata'?'<button class="btn btn-sm" onclick="event.stopPropagation();showToast(\'Download per SAP: '+d.id.replace(/'/g,'')+'\')" style="font-size:10.5px;white-space:nowrap">⬇ SAP</button>':'')
     +'<a style="font-size:11px;color:var(--acc);cursor:pointer" onclick="event.stopPropagation();go(\'trasporto-d\')">Apri →</a>'
@@ -2071,17 +2183,131 @@ function rLogRice(){
 // ═══════════════════════════════════════════════════════════
 // DATA — POD
 // ═══════════════════════════════════════════════════════════
+D.docRicevuti = [
+  {id:'DR-001',nomeFile:'POD_GLS2025441892.pdf',dataCaricamento:'13/06/2025 08:15',
+   dataConsegna:'13/06/2025',corriereCod:'0000870476',corriereDescr:'GLS Italy Srl',
+   pivaCorriere:'IT02683620162',mailMittente:'logistics@gls-italy.com',
+   canale:'Email',tipoDoc:'POD',st:'caricato',podId:'POD-001',annotazione:'',firmataCli:false,timbrata:false},
+  {id:'DR-002',nomeFile:'CMR_GLS2025441892.pdf',dataCaricamento:'13/06/2025 08:15',
+   dataConsegna:'13/06/2025',corriereCod:'0000870476',corriereDescr:'GLS Italy Srl',
+   pivaCorriere:'IT02683620162',mailMittente:'logistics@gls-italy.com',
+   canale:'Email',tipoDoc:'CMR',st:'caricato',podId:'POD-001',annotazione:'',firmataCli:false,timbrata:false},
+  {id:'DR-003',nomeFile:'DHL_ESA_20250613_POD.pdf',dataCaricamento:'13/06/2025 10:05',
+   dataConsegna:'13/06/2025',corriereCod:'0000345012',corriereDescr:'DHL Express Italy Srl',
+   pivaCorriere:'IT09823820152',mailMittente:'b2b@dhl.com',
+   canale:'SFTP',tipoDoc:'POD',st:'caricato',podId:'POD-002',annotazione:'',firmataCli:false,timbrata:false},
+  {id:'DR-004',nomeFile:'BRT_BATCH_20250613.pdf',dataCaricamento:'13/06/2025 09:10',
+   dataConsegna:'13/06/2025',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   pivaCorriere:'IT04821091007',mailMittente:'logistics@brt.it',
+   canale:'Email',tipoDoc:'POD',st:'caricato',podId:'POD-003',annotazione:'',firmataCli:false,timbrata:false},
+  {id:'DR-005',nomeFile:'TNT_POD_UNKNOWN_002.pdf',dataCaricamento:'12/06/2025 18:10',
+   dataConsegna:'',corriereCod:'0000567891',corriereDescr:'TNT Italy Srl',
+   pivaCorriere:'IT04932520961',mailMittente:'edi@tnt.com',
+   canale:'Email',tipoDoc:'POD',st:'anomalia',podId:'',annotazione:'Nr. spedizione non riconosciuto'},
+  {id:'DR-006',nomeFile:'POD_BRT20250099001_NOMATCH.pdf',dataCaricamento:'11/06/2025 11:30',
+   dataConsegna:'',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   pivaCorriere:'IT04821091007',mailMittente:'logistics@brt.it',
+   canale:'Email',tipoDoc:'POD',st:'anomalia',podId:'',annotazione:'Destinazione non trovata in piattaforma'},
+  {id:'DR-007',nomeFile:'POD_BRT_UNKNOWN_001.pdf',dataCaricamento:'12/06/2025 14:05',
+   dataConsegna:'',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   pivaCorriere:'IT04821091007',mailMittente:'logistics@brt.it',
+   canale:'Email',tipoDoc:'POD',st:'anomalia',podId:'',annotazione:'',firmataCli:false,timbrata:false},
+  {id:'DR-008',nomeFile:'FERCAM_CMR_20250612.pdf',dataCaricamento:'12/06/2025 15:30',
+   dataConsegna:'12/06/2025',corriereCod:'0000789012',corriereDescr:'Fercam SpA',
+   pivaCorriere:'IT00728160214',mailMittente:'ops@fercam.com',
+   canale:'SFTP',tipoDoc:'CMR',st:'caricato',podId:'',annotazione:'CMR senza POD abbinata'},
+];
 D.pod = [
-  {id:'POD-001',ddtId:'DDT/2025/0440-1',trId:'TR-2025-0440',sap:'0080041233',vett:'GLS Italy',ldv:'GLS2025441892',dest:'Clinica Mater Dei — Roma',firmaDdt:'13/06/2025 09:47',ricevuta:'13/06/2025 17:22',ricevente:'Dott. Bianchi',st:'ricevuta',matchAuto:true,conf:98,file:'POD_GLS2025441892.pdf',azSap:false},
-  {id:'POD-002',ddtId:'DDT/2025/0439-1',trId:'TR-2025-0439',sap:'0080041232',vett:'DHL Express',ldv:'DHL9841234567',dest:'AOU Careggi — Firenze',firmaDdt:'13/06/2025 10:22',ricevuta:'13/06/2025 14:55',ricevente:'Magazzino Accettazione',st:'ricevuta',matchAuto:true,conf:95,file:'POD_DHL9841234567.pdf',azSap:false},
-  {id:'POD-003',ddtId:'DDT/2025/0438-1',trId:'TR-2025-0438',sap:'0080041231',vett:'BRT SpA',ldv:'BRT20250012847',dest:'Policlinico Gemelli — Roma',firmaDdt:'12/06/2025 14:38',ricevuta:'13/06/2025 09:10',ricevente:'Uff. Economato',st:'ricevuta',matchAuto:true,conf:99,file:'POD_BRT20250012847.pdf',azSap:true},
-  {id:'POD-004',ddtId:'DDT/2025/0438-2',trId:'TR-2025-0438',sap:'0080041231',vett:'BRT SpA',ldv:'BRT20250012848',dest:'Policlinico Gemelli — Roma',firmaDdt:'12/06/2025 14:38',ricevuta:'13/06/2025 09:10',ricevente:'Uff. Economato',st:'ricevuta',matchAuto:true,conf:99,file:'POD_BRT20250012848.pdf',azSap:true},
-  {id:'POD-005',ddtId:'DDT/2025/0438-3',trId:'TR-2025-0438',sap:'0080041231',vett:'BRT SpA',ldv:'BRT20250012849',dest:'Policlinico Gemelli — Roma',firmaDdt:'12/06/2025 14:38',ricevuta:'13/06/2025 09:10',ricevente:'Uff. Economato',st:'ricevuta',matchAuto:true,conf:99,file:'POD_BRT20250012849.pdf',azSap:true},
-  {id:'POD-006',ddtId:'DDT/2025/0438-4',trId:'TR-2025-0438',sap:'0080041231',vett:'BRT SpA',ldv:'BRT20250012850',dest:'Policlinico Gemelli — Roma',firmaDdt:'12/06/2025 14:38',ricevuta:'',ricevente:'',st:'da_abbinare',matchAuto:false,conf:0,file:'POD_BRT_UNKNOWN_001.pdf',azSap:false},
-  {id:'POD-007',ddtId:'DDT/2025/0441-1',trId:'TR-2025-0441',sap:'0080041234',vett:'BRT SpA',ldv:'',dest:'Ospedale S. Raffaele — Milano',firmaDdt:'',ricevuta:'',ricevente:'',st:'attesa',matchAuto:false,conf:0,file:'',azSap:false},
-  {id:'POD-008',ddtId:'DDT/2025/0439-2',trId:'TR-2025-0439',sap:'0080041232',vett:'DHL Express',ldv:'',dest:'AOU Careggi — Firenze',firmaDdt:'',ricevuta:'',ricevente:'',st:'attesa',matchAuto:false,conf:0,file:'',azSap:false},
-  {id:'POD-009',ddtId:'',trId:'',sap:'',vett:'TNT Italy',ldv:'',dest:'Humanitas — Rozzano',firmaDdt:'',ricevuta:'12/06/2025 18:10',ricevente:'',st:'da_abbinare',matchAuto:false,conf:62,file:'TNT_POD_UNKNOWN_002.pdf',azSap:false},
-  {id:'POD-010',ddtId:'',trId:'',sap:'',vett:'BRT SpA',ldv:'BRT20250099001',dest:'',firmaDdt:'',ricevuta:'11/06/2025 11:30',ricevente:'',st:'da_abbinare',matchAuto:false,conf:55,file:'POD_BRT20250099001_NOMATCH.pdf',azSap:false},
+  {id:'POD-001',ddtId:'DDT/2025/0440-1',trId:'TR-2025-0440',sap:'0080041233',
+   vett:'GLS Italy',corriereCod:'0000870476',corriereDescr:'GLS Italy Srl',
+   ldv:'GLS2025441892',dest:'Clinica Mater Dei — Roma',codDest:'IT-RM-001',
+   descr2Dest:'Reparto Radiologia',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'GLS Italy Srl',sdCumulo:'SC2025001',dIDTrack:'TRK8847291',
+   rttf:'MI01',numFt:'FT2025/0441',
+   firmaDdt:'13/06/2025 09:47',dataUscita:'13/06/2025',ricevuta:'13/06/2025 17:22',
+   ricevente:'Dott. Bianchi',st:'consegnato',matchAuto:true,conf:98,
+   file:'POD_GLS2025441892.pdf',azSap:false,cmr:true,docAbbinati:true,annotazione:'',firmataCli:false,timbrata:false},
+  {id:'POD-002',ddtId:'DDT/2025/0439-1',trId:'TR-2025-0439',sap:'0080041232',
+   vett:'DHL Express',corriereCod:'0000345012',corriereDescr:'DHL Express Italy Srl',
+   ldv:'DHL9841234567',dest:'AOU Careggi — Firenze',codDest:'IT-FI-002',
+   descr2Dest:'Uff. Accettazione',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'DHL Express Italy Srl',sdCumulo:'SC2025002',dIDTrack:'TRK9912345',
+   rttf:'FI01',numFt:'FT2025/0442',
+   firmaDdt:'13/06/2025 10:22',dataUscita:'13/06/2025',ricevuta:'13/06/2025 14:55',
+   ricevente:'Magazzino Accettazione',st:'consegnato',matchAuto:true,conf:95,
+   file:'POD_DHL9841234567.pdf',azSap:false,cmr:true,docAbbinati:true,annotazione:'',firmataCli:false,timbrata:false},
+  {id:'POD-003',ddtId:'DDT/2025/0438-1',trId:'TR-2025-0438',sap:'0080041231',
+   vett:'BRT SpA',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   ldv:'BRT20250012847',dest:'Policlinico Gemelli — Roma',codDest:'IT-RM-003',
+   descr2Dest:'Magazzino Centrale',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'BRT Corriere Espresso SpA',sdCumulo:'SC2025003',dIDTrack:'TRK7734512',
+   rttf:'RM01',numFt:'FT2025/0443',
+   firmaDdt:'12/06/2025 14:38',dataUscita:'12/06/2025',ricevuta:'13/06/2025 09:10',
+   ricevente:'Uff. Economato',st:'consegnato',matchAuto:true,conf:99,
+   file:'POD_BRT20250012847.pdf',azSap:true,cmr:true,docAbbinati:true,annotazione:'Consegna regolare',firmataCli:true,timbrata:true},
+  {id:'POD-004',ddtId:'DDT/2025/0438-2',trId:'TR-2025-0438',sap:'0080041231',
+   vett:'BRT SpA',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   ldv:'BRT20250012848',dest:'Policlinico Gemelli — Roma',codDest:'IT-RM-003',
+   descr2Dest:'Magazzino Centrale',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'BRT Corriere Espresso SpA',sdCumulo:'SC2025003',dIDTrack:'TRK7734513',
+   rttf:'RM01',numFt:'FT2025/0443',
+   firmaDdt:'12/06/2025 14:38',dataUscita:'12/06/2025',ricevuta:'13/06/2025 09:10',
+   ricevente:'Uff. Economato',st:'consegnato',matchAuto:true,conf:99,
+   file:'POD_BRT20250012848.pdf',azSap:true,cmr:false,docAbbinati:true,annotazione:'',firmataCli:false,timbrata:false},
+  {id:'POD-005',ddtId:'DDT/2025/0438-3',trId:'TR-2025-0438',sap:'0080041231',
+   vett:'BRT SpA',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   ldv:'BRT20250012849',dest:'Policlinico Gemelli — Roma',codDest:'IT-RM-003',
+   descr2Dest:'',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'BRT Corriere Espresso SpA',sdCumulo:'',dIDTrack:'TRK7734514',
+   rttf:'RM01',numFt:'',
+   firmaDdt:'12/06/2025 14:38',dataUscita:'12/06/2025',ricevuta:'13/06/2025 09:10',
+   ricevente:'Uff. Economato',st:'restituito',matchAuto:true,conf:99,
+   file:'POD_BRT20250012849.pdf',azSap:true,cmr:false,docAbbinati:false,annotazione:'Reso per imballaggio danneggiato',firmataCli:false,timbrata:false},
+  {id:'POD-006',ddtId:'DDT/2025/0438-4',trId:'TR-2025-0438',sap:'0080041231',
+   vett:'BRT SpA',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   ldv:'BRT20250012850',dest:'Policlinico Gemelli — Roma',codDest:'IT-RM-003',
+   descr2Dest:'',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'BRT Corriere Espresso SpA',sdCumulo:'',dIDTrack:'',
+   rttf:'',numFt:'',
+   firmaDdt:'',dataUscita:'12/06/2025',ricevuta:'',
+   ricevente:'',st:'da_abbinare',matchAuto:false,conf:0,
+   file:'POD_BRT_UNKNOWN_001.pdf',azSap:false,cmr:false,docAbbinati:false,annotazione:'',firmataCli:false,timbrata:false},
+  {id:'POD-007',ddtId:'DDT/2025/0441-1',trId:'TR-2025-0441',sap:'0080041234',
+   vett:'BRT SpA',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   ldv:'',dest:'Ospedale S. Raffaele — Milano',codDest:'IT-MI-001',
+   descr2Dest:'',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'BRT Corriere Espresso SpA',sdCumulo:'',dIDTrack:'',
+   rttf:'',numFt:'',
+   firmaDdt:'',dataUscita:'13/06/2025',ricevuta:'',
+   ricevente:'',st:'in_transito',matchAuto:false,conf:0,
+   file:'',azSap:false,cmr:false,docAbbinati:false,annotazione:'',firmataCli:false,timbrata:false},
+  {id:'POD-008',ddtId:'DDT/2025/0439-2',trId:'TR-2025-0439',sap:'0080041232',
+   vett:'DHL Express',corriereCod:'0000345012',corriereDescr:'DHL Express Italy Srl',
+   ldv:'',dest:'AOU Careggi — Firenze',codDest:'IT-FI-002',
+   descr2Dest:'',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'DHL Express Italy Srl',sdCumulo:'',dIDTrack:'',
+   rttf:'',numFt:'',
+   firmaDdt:'',dataUscita:'13/06/2025',ricevuta:'',
+   ricevente:'',st:'in_transito',matchAuto:false,conf:0,
+   file:'',azSap:false,cmr:false,docAbbinati:false,annotazione:'',firmataCli:false,timbrata:false},
+  {id:'POD-009',ddtId:'',trId:'',sap:'',
+   vett:'TNT Italy',corriereCod:'0000567891',corriereDescr:'TNT Italy Srl',
+   ldv:'',dest:'Humanitas — Rozzano',codDest:'IT-MI-002',
+   descr2Dest:'',orgVendita:'IT10',paese:'IT',
+   vettoreDescr:'TNT Italy Srl',sdCumulo:'',dIDTrack:'',
+   rttf:'',numFt:'',
+   firmaDdt:'',dataUscita:'12/06/2025',ricevuta:'12/06/2025 18:10',
+   ricevente:'',st:'da_abbinare',matchAuto:false,conf:62,
+   file:'TNT_POD_UNKNOWN_002.pdf',azSap:false,cmr:false,docAbbinati:false,annotazione:'',firmataCli:false,timbrata:false},
+  {id:'POD-010',ddtId:'',trId:'',sap:'',
+   vett:'BRT SpA',corriereCod:'0000198734',corriereDescr:'BRT Corriere Espresso SpA',
+   ldv:'BRT20250099001',dest:'',codDest:'',
+   descr2Dest:'',orgVendita:'',paese:'IT',
+   vettoreDescr:'BRT Corriere Espresso SpA',sdCumulo:'',dIDTrack:'',
+   rttf:'',numFt:'',
+   firmaDdt:'',dataUscita:'11/06/2025',ricevuta:'11/06/2025 11:30',
+   ricevente:'',st:'da_abbinare',matchAuto:false,conf:55,
+   file:'POD_BRT20250099001_NOMATCH.pdf',azSap:false,cmr:false,docAbbinati:false,annotazione:'',firmataCli:false,timbrata:false},
 ];
 
 // ═══════════════════════════════════════════════════════════
@@ -2094,132 +2320,198 @@ var CURRENT_POD_ID = 'POD-003';
 function rPodD(){
   var p = D.pod.find(function(x){return x.id===CURRENT_POD_ID;}) || D.pod[2];
   var isDaAbbinare = p.st==='da_abbinare' || !p.ddtId;
-  function podBadge(s){return({ricevuta:'<span class="badge ok">✓ POD ricevuta</span>',da_abbinare:'<span class="badge warn">⚠ Da abbinare</span>',attesa:'<span class="badge info">⏳ Attesa consegna</span>',anomalia:'<span class="badge err">✗ Anomalia</span>',scaduta:'<span class="badge err">⏰ Scaduta</span>'})[s]||'<span class="badge grey">'+s+'</span>';}
-  var ddt = p.ddtId ? D.ddt_firmate.find(function(d){return d.id===p.ddtId;}):null;
+  function podBadge(s){return({
+    consegnato:'<span class="badge ok">✓ Consegnato</span>',
+    restituito:'<span class="badge warn">↩ Restituito</span>',
+    in_transito:'<span class="badge info">⏳ In transito</span>',
+    da_abbinare:'<span class="badge warn">⚠ Da abbinare</span>',
+    anomalia:'<span class="badge err">✗ Anomalia</span>'
+  })[s]||'<span class="badge grey">'+s+'</span>';}
+  var ddt = p.ddtId ? D.ddt_firmate.find(function(d){return d.id===p.ddtId;}) : null;
   var at=[
     p.firmaDdt?{ts:p.firmaDdt,ic:'✅',user:'Sistema',evt:'DDT firmata dal trasportatore',det:p.ddtId+' — '+(p.trId||'—')}:null,
-    p.ricevuta?{ts:p.ricevuta,ic:'📧',user:'Sistema',evt:'POD ricevuta via email da '+p.vett,det:p.file||'—'}:null,
-    p.ricevuta?{ts:p.ricevuta,ic:'🤖',user:'Sistema',evt:'ICR processato — confidence '+(p.conf||0)+'%',det:'Nr. LDV: '+(p.ldv||'non estratto')}:null,
-    p.matchAuto?{ts:p.ricevuta,ic:'🔗',user:'Sistema',evt:'Match automatico completato',det:'DDT abbinata: '+p.ddtId}:null,
+    p.ricevuta?{ts:p.ricevuta,ic:'📧',user:'Sistema',evt:'POD ricevuta via '+(p.canale||'email'),det:p.file||'—'}:null,
+    p.conf>0?{ts:p.ricevuta||'—',ic:'🤖',user:'Sistema',evt:'ICR processato — confidence '+p.conf+'%',det:'Nr. LDV: '+(p.ldv||'non estratto')}:null,
+    p.matchAuto&&p.ddtId?{ts:p.ricevuta||'—',ic:'🔗',user:'Sistema',evt:'Match automatico completato',det:'DDT abbinata: '+p.ddtId}:null,
     !p.matchAuto&&p.ddtId?{ts:p.ricevuta||'—',ic:'👤',user:'Operatore',evt:'Match manuale eseguito',det:'DDT abbinata: '+p.ddtId}:null,
     p.azSap?{ts:'—',ic:'⬇',user:'M. Martinis',evt:'Download per SAP eseguito',det:'Conferma consegna scaricata'}:null
   ].filter(Boolean);
 
-  return '<div class="bc"><a onclick="go(\'pod-recovery\')">POD Recovery</a>'
+  return '<div class="bc"><a onclick="go(\'pod-recovery\')">POD &amp; CMR</a>'
     +'<span class="bc-sep">›</span><span class="mono">'+p.id+'</span>'+podBadge(p.st)
     +'<div style="margin-left:auto;display:flex;gap:8px">'
-    +(p.st==='ricevuta'&&!p.azSap?'<button class="btn btn-sm btn-ok" onclick="podSapDownloadDet(\''+p.id+'\')">⬇ Download per SAP</button>':'')
-    +(p.st==='ricevuta'&&p.azSap?'<span class="badge ok">✓ Già scaricato per SAP</span>':'')
+    +(p.st==='consegnato'&&!p.azSap?'<button class="btn btn-sm btn-ok" onclick="podSapDownloadDet(\''+p.id+'\')">⬇ Download per SAP</button>':'')
+    +(p.st==='consegnato'&&p.azSap?'<span class="badge ok" style="font-size:11px">✓ Già scaricato per SAP</span>':'')
     +'<button class="btn btn-sm" onclick="showToast(\'Download PDF POD\')">⬇ PDF POD</button>'
     +'</div></div>'
 
-  // doc-chain
-  +'<div class="doc-chain" style="margin-bottom:16px">'
-  +(p.sap?'<div class="dc-item clickable" onclick="go(\'trasporto-d\')"><span class="dc-icon">🚛</span><div class="dc-info"><div class="dc-label">Trasporto SAP</div><div class="dc-ref">'+p.sap+'</div></div></div>':'<div class="dc-item dimmed"><span class="dc-icon">🚛</span><div class="dc-info"><div class="dc-label">Trasporto SAP</div><div class="dc-ref">Non abbinato</div></div></div>')
-  +(p.ddtId?'<div class="dc-item clickable" onclick="go(\'ddt-firmate\')"><span class="dc-icon">📄</span><div class="dc-info"><div class="dc-label">DDT firmata</div><div class="dc-ref">'+p.ddtId+'</div></div><span class="badge ok" style="font-size:10px">✓ Firmata</span></div>':'<div class="dc-item dimmed"><span class="dc-icon">📄</span><div class="dc-info"><div class="dc-label">DDT firmata</div><div class="dc-ref">Da abbinare</div></div></div>')
-  +'<div class="dc-item active-doc"><span class="dc-icon">📬</span><div class="dc-info"><div class="dc-label">POD (attiva)</div><div class="dc-ref">'+p.id+'</div></div>'+podBadge(p.st)+'</div>'
-  +'</div>'
+    // doc-chain
+    +'<div class="doc-chain" style="margin-bottom:16px">'
+    +(p.sap?'<div class="dc-item clickable" onclick="go(\'trasporto-d\')"><span class="dc-icon">🚛</span><div class="dc-info"><div class="dc-label">Trasporto SAP</div><div class="dc-ref">'+p.sap+'</div></div></div>':'<div class="dc-item dimmed"><span class="dc-icon">🚛</span><div class="dc-info"><div class="dc-label">Trasporto SAP</div><div class="dc-ref">Non abbinato</div></div></div>')
+    +(p.ddtId?'<div class="dc-item clickable" onclick="go(\'ddt-firmate\')"><span class="dc-icon">📄</span><div class="dc-info"><div class="dc-label">DDT firmata</div><div class="dc-ref">'+p.ddtId+'</div></div><span class="badge ok" style="font-size:10px">✓ Firmata</span></div>':'<div class="dc-item dimmed"><span class="dc-icon">📄</span><div class="dc-info"><div class="dc-label">DDT firmata</div><div class="dc-ref">Da abbinare</div></div></div>')
+    +'<div class="dc-item active-doc"><span class="dc-icon">📬</span><div class="dc-info"><div class="dc-label">POD (attiva)</div><div class="dc-ref">'+p.id+'</div></div>'+podBadge(p.st)+'</div>'
+    +'</div>'
 
-  // MAIN LAYOUT — split left/right
-  +'<div class="split wide-l"><div class="split-l">'
+    +'<div class="split"><div class="split-l">'
 
-  // ── Sezione abbinamento manuale (solo se da abbinare) ──────────
-  +(isDaAbbinare?'<div class="card" style="border:1.5px solid var(--warnb)">'
-    +'<div class="card-h" style="background:var(--warnl)"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">⚠️</span><div class="card-title" style="color:var(--warn)">Abbinamento manuale richiesto</div></div></div>'
+    // Abbinamento manuale
+    +(isDaAbbinare?'<div class="card" style="border:1.5px solid var(--warnb)">'
+      +'<div class="card-h" style="background:var(--warnl)"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">⚠️</span><div class="card-title" style="color:var(--warn)">Abbinamento manuale richiesto</div></div></div>'
+      +'<div style="padding:14px 18px">'
+      +'<p style="font-size:12.5px;color:var(--mut);margin-bottom:14px">Nr. LDV non estratto. Compila i dati mancanti e seleziona la DDT.</p>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Nr. LDV / Tracking</div><input class="icr-i" id="pod-man-ldv" placeholder="Es. BRT20250012345" style="width:100%"></div>'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Data consegna</div><input class="fdate" id="pod-man-data" style="width:100%"></div>'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Ricevente</div><input class="icr-i" id="pod-man-rice" placeholder="Es. Uff. Economato" style="width:100%"></div>'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Note</div><input class="icr-i" id="pod-man-note" placeholder="Opzionale" style="width:100%"></div>'
+      +'</div>'
+      +'<div><div class="info-lbl" style="margin-bottom:6px">DDT da abbinare</div>'
+      +'<div style="display:flex;gap:8px">'
+      +'<select class="fsel" id="pod-d-match-sel" style="flex:1;padding:9px 10px">'
+      +'<option value="">— Seleziona DDT firmata —</option>'
+      +D.ddt_firmate.filter(function(d){return d.st==='firmata'&&!D.pod.find(function(x){return x.ddtId===d.id&&x.st==='consegnato';});}).map(function(d){
+        return '<option value="'+d.id+'">'+d.id+' — '+d.dest+'</option>';
+      }).join('')
+      +'</select>'
+      +'<button class="btn btn-ok" onclick="podDetailMatch(\''+p.id+'\')">✓ Abbina</button>'
+      +'</div></div>'
+      +'</div></div>'
+    :'')
+
+    // Dati POD
+    +'<div class="card"><div class="card-h"><div class="card-title">Dati POD</div>'+podBadge(p.st)+'</div>'
+    +'<div class="info-grid" style="grid-template-columns:1fr 1fr 1fr 1fr">'
+    +[['ID POD',p.id],['Vettore',p.corriereDescr||p.vett],['Cod. corriere',p.corriereCod||'—'],['Nr. LDV',p.ldv||'—'],
+      ['Data uscita merce',p.dataUscita||'—'],['Data consegna',p.ricevuta||'—'],['Ricevente',p.ricevente||'—'],['File',p.file||'—'],
+      ['Doc. abbinati',p.docAbbinati?'SI':'NO'],['CMR',p.cmr?'SI':'NO'],['Firmata cliente',p.firmataCli?'SI':'NO'],['Timbrata',p.timbrata?'SI':'NO'],['Match',p.matchAuto?'Automatico':'Manuale'],['Conf. ICR',p.conf>0?p.conf+'%':'—']
+    ].map(function(x){
+      return '<div class="info-field"><div class="info-lbl">'+x[0]+'</div><div class="info-val" style="font-size:12px">'+x[1]+'</div></div>';
+    }).join('')
+    +'</div></div>'
+
+    // Campi aggiuntivi
+    +'<div class="card"><div class="card-h"><div class="card-title">Dettaglio spedizione</div></div>'
+    +'<div class="info-grid" style="grid-template-columns:1fr 1fr 1fr 1fr">'
+    +[['Codice Dest.',p.codDest||'—'],['Descr. 2 Dest.',p.descr2Dest||'—'],['Org. Vendita',p.orgVendita||'—'],['Paese',p.paese||'—'],
+      ['Vettore Descr.',p.vettoreDescr||'—'],['SdCumulo',p.sdCumulo||'—'],['$dIDTrack',p.dIDTrack||'—'],['RTTF',p.rttf||'—'],
+      ['Num. FT',p.numFt||'—'],['Nr. Trasporto SAP',p.sap||'—'],['DDT abbinata',p.ddtId||'—'],['Stato',p.st]
+    ].map(function(x){
+      return '<div class="info-field"><div class="info-lbl">'+x[0]+'</div><div class="info-val" style="font-size:12px">'+x[1]+'</div></div>';
+    }).join('')
+    +'</div></div>'
+
+    // DDT abbinata
+    +(ddt?'<div class="card"><div class="card-h"><div class="card-title">DDT abbinata</div><span class="badge '+(p.matchAuto?'ok':'info')+'" style="font-size:10.5px">'+(p.matchAuto?'✓ Match auto':'✓ Match manuale')+'</span></div>'
+      +'<div class="info-grid" style="grid-template-columns:1fr 1fr 1fr 1fr">'
+      +[['ID DDT',ddt.id],['Nr. Trasporto',ddt.sap],['Destinazione',ddt.dest],['Articolo',ddt.art],
+        ['Qtà',ddt.qty+' pz'],['Autista',ddt.autista||'—'],['Targa',ddt.targa||'—'],['Data firma',ddt.firmata||'—']
+      ].map(function(x){
+        return '<div class="info-field"><div class="info-lbl">'+x[0]+'</div><div class="info-val" style="font-size:12px">'+x[1]+'</div></div>';
+      }).join('')
+      +'</div></div>'
+    :'')
+
+    // Inserisci POD document
+    +'<div class="card"><div class="card-h"><div class="card-title">Documento POD</div></div>'
     +'<div style="padding:14px 18px">'
-    +'<p style="font-size:12.5px;color:var(--mut);margin-bottom:14px">Nr. LDV non estratto automaticamente. Compila i dati mancanti e seleziona la DDT corrispondente.</p>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
-    +'<div><div class="info-lbl" style="margin-bottom:4px">Nr. LDV / Tracking</div><input class="icr-i" id="pod-man-ldv" placeholder="Es. BRT20250012345" style="width:100%"></div>'
-    +'<div><div class="info-lbl" style="margin-bottom:4px">Data consegna</div><input class="fdate" id="pod-man-data" style="width:100%"></div>'
-    +'<div><div class="info-lbl" style="margin-bottom:4px">Nome ricevente</div><input class="icr-i" id="pod-man-rice" placeholder="Es. Uff. Economato" style="width:100%"></div>'
-    +'<div><div class="info-lbl" style="margin-bottom:4px">Note</div><input class="icr-i" id="pod-man-note" placeholder="Opzionale" style="width:100%"></div>'
+    +(p.file
+      ? '<div class="pod-slot filled">'
+        +'<span style="font-size:22px">✅</span>'
+        +'<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--ok)">'+p.file+'</div>'
+        +'<div style="font-size:11.5px;color:var(--mut);margin-top:2px">Documento caricato</div></div>'
+        +'<a style="font-size:12px;color:var(--acc);cursor:pointer;margin-right:10px" onclick="showToast(\'Visualizza: '+p.file+'\')">Visualizza</a>'
+        +'<a style="font-size:12px;color:var(--err);cursor:pointer" onclick="podRemoveDoc(\''+p.id+'\')">Rimuovi</a>'
+        +'</div>'
+      : '<div class="pod-slot" onclick="podInsertDoc(\''+p.id+'\')">'
+        +'<span style="font-size:22px">📄</span>'
+        +'<div><div style="font-size:13px;font-weight:600">Nessun documento POD</div>'
+        +'<div style="font-size:12px;color:var(--mut);margin-top:2px">Clicca per caricare il documento POD</div></div>'
+        +'<button class="btn btn-sm btn-p" onclick="event.stopPropagation();podInsertDoc(\''+p.id+'\')">⬆ Inserisci POD</button>'
+        +'</div>'
+    )
+    +'</div></div>'
+
+    // Conferma SAP
+    +(p.st==='consegnato'?'<div class="card"><div class="card-h"><div class="card-title">Conferma consegna SAP</div>'
+      +'<span id="pod-sap-st-'+p.id+'" class="badge '+(p.azSap?'ok':'grey')+'">'+(p.azSap?'✓ Scaricato':'Da scaricare')+'</span>'
+      +'</div><div style="padding:14px 18px">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">'
+      +[['Nr. Trasporto SAP',p.sap||'—'],['DDT abbinata',p.ddtId||'—'],['Data consegna',p.ricevuta||'—']].map(function(x){
+        return '<div style="background:var(--bg);border-radius:7px;padding:9px 11px"><div class="info-lbl" style="margin-bottom:2px">'+x[0]+'</div><div style="font-size:13px;font-weight:600">'+x[1]+'</div></div>';
+      }).join('')
+      +'</div>'
+      +(p.azSap
+        ?'<div style="padding:10px 12px;background:var(--okl);border-radius:7px;border:1px solid var(--okb);font-size:12.5px;color:var(--ok)">✓ Download eseguito</div>'
+        :'<button class="btn btn-ok" onclick="podSapDownloadDet(\''+p.id+'\')">⬇ Download conferma consegna per SAP</button>')
+      +'</div></div>'
+    :'')
+
+    // Annotazione
+    +'<div class="card"><div class="card-h"><div class="card-title">Annotazione</div></div>'
+    +'<div class="annot-wrap">'
+    +'<textarea id="pod-annot-'+p.id+'" placeholder="Inserisci note sulla spedizione...">'+p.annotazione+'</textarea>'
+    +'<div style="display:flex;justify-content:flex-end;margin-top:8px">'
+    +'<button class="btn btn-ok btn-sm" onclick="podSaveAnnot(\''+p.id+'\')">✓ Aggiorna</button>'
+    +'</div></div></div>'
+
+    +audit(at)
     +'</div>'
-    +'<div><div class="info-lbl" style="margin-bottom:6px">DDT da abbinare</div>'
-    +'<div style="display:flex;gap:8px">'
-    +'<select class="fsel" id="pod-d-match-sel" style="flex:1;padding:9px 10px">'
-    +'<option value="">— Seleziona DDT firmata —</option>'
-    +D.ddt_firmate.filter(function(d){return d.st==='firmata'&&!D.pod.find(function(x){return x.ddtId===d.id&&x.st==='ricevuta';});}).map(function(d){
-      return '<option value="'+d.id+'">'+d.id+' — '+d.dest+' ('+d.art+')</option>';
-    }).join('')
-    +'</select>'
-    +'<button class="btn btn-ok" onclick="podDetailMatch(\''+p.id+'\')">✓ Abbina</button>'
-    +'</div></div>'
-    +'</div></div>'
-  :'')
 
-  // ── Dati POD ──────────────────────────────────────────────────
-  +'<div class="card"><div class="card-h"><div class="card-title">Dati POD</div>'+podBadge(p.st)+'</div>'
-  +'<div class="info-grid" style="grid-template-columns:1fr 1fr 1fr 1fr">'
-  +[['ID POD',p.id],['Vettore',p.vett],['Nr. LDV / Tracking',p.ldv||'—'],['File ricevuto',p.file||'—'],['Data ricezione POD',p.ricevuta||'—'],['Nome ricevente',p.ricevente||'—'],['Destinazione',p.dest||'—'],['Match',p.matchAuto?'Automatico (ICR)':'Manuale']].map(function(x){
-    return '<div class="info-field"><div class="info-lbl">'+x[0]+'</div><div class="info-val" style="font-size:12.5px">'+x[1]+'</div></div>';
-  }).join('')
-  +'</div></div>'
-
-  // ── DDT abbinata ───────────────────────────────────────────────
-  +(ddt?'<div class="card"><div class="card-h"><div class="card-title">DDT abbinata</div><span class="badge '+(p.matchAuto?'ok':'info')+'" style="font-size:10.5px">'+(p.matchAuto?'✓ Match auto':'✓ Match manuale')+'</span></div>'
-    +'<div class="info-grid">'
-    +[['ID DDT',ddt.id],['Nr. Trasporto SAP',ddt.sap],['Destinazione',ddt.dest],['Articolo',ddt.art],['Qtà',ddt.qty+' pz'],['Autista',ddt.autista||'—'],['Targa',ddt.targa||'—'],['Data firma',ddt.firmata||'—']].map(function(x){
-      return '<div class="info-field"><div class="info-lbl">'+x[0]+'</div><div class="info-val" style="font-size:12.5px">'+x[1]+'</div></div>';
-    }).join('')
-    +'</div></div>'
-  :'')
-
-  // ── Conferma consegna SAP ─────────────────────────────────────
-  +(p.st==='ricevuta'?'<div class="card"><div class="card-h"><div class="card-title">Conferma consegna SAP</div>'
-    +'<span id="pod-sap-st-'+p.id+'" class="badge '+(p.azSap?'ok':'grey')+'">'+(p.azSap?'✓ Scaricato':'Da scaricare')+'</span>'
-    +'</div><div style="padding:14px 18px">'
-    +'<p style="font-size:12.5px;color:var(--mut);margin-bottom:12px">Scarica il file di conferma consegna da importare manualmente in SAP per chiudere il ciclo attivo.</p>'
-    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">'
-    +[['Nr. Trasporto SAP',p.sap||'—'],['DDT abbinata',p.ddtId||'—'],['Data consegna',p.ricevuta||'—']].map(function(x){
-      return '<div style="background:var(--bg);border-radius:7px;padding:9px 11px"><div class="info-lbl" style="margin-bottom:2px">'+x[0]+'</div><div style="font-size:13px;font-weight:600">'+x[1]+'</div></div>';
-    }).join('')
+    // Right: PDF
+    +'<div class="split-r"><div class="pdf-wrap"><div class="pdf-tb">'
+    +'<span>📄 '+(p.file||'documento_POD.pdf')+'</span>'
+    +(p.file?'<button class="btn btn-sm">⬇ PDF</button>':'')
     +'</div>'
-    +(p.azSap
-      ?'<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--okl);border-radius:7px;border:1px solid var(--okb)"><span style="color:var(--ok)">✓</span><span style="font-size:12.5px;color:var(--ok);font-weight:500">Download eseguito — conferma inviata a SAP</span></div>'
-      :'<button class="btn btn-ok" onclick="podSapDownloadDet(\''+p.id+'\')">⬇ Download conferma consegna per SAP</button>')
-    +'<div style="margin-top:10px;padding:9px 12px;background:var(--infol);border-radius:6px;font-size:12px;color:var(--info)">📋 <strong>Fase 2:</strong> aggiornamento automatico SAP via API dopo ricezione POD.</div>'
+    +(p.file
+      ? '<div class="pdf-stage"><div class="pdf-page">'
+        +'<div class="pdf-hdr"><div style="font-size:10px;font-weight:700">'+p.vett.toUpperCase()+'</div><div style="text-align:right;font-size:8px;color:#666">Proof of Delivery</div></div>'
+        +'<div class="pdf-doctitle">PROVA DI CONSEGNA</div>'
+        +'<div class="pdf-meta">'
+        +'<div><div class="pdf-meta-lbl">Nr. LDV</div><div class="pdf-meta-val">'+(p.ldv||'—')+'</div></div>'
+        +'<div><div class="pdf-meta-lbl">Data consegna</div><div class="pdf-meta-val">'+(p.ricevuta||'—')+'</div></div>'
+        +'<div><div class="pdf-meta-lbl">Mittente</div><div class="pdf-meta-val">Esaote SpA — Firenze</div></div>'
+        +'<div><div class="pdf-meta-lbl">Destinatario</div><div class="pdf-meta-val">'+p.dest+'</div></div>'
+        +'</div>'
+        +'<table class="pdf-tbl"><thead><tr><th>Rif. DDT</th><th>Colli</th><th>Peso</th><th>Ricevente</th></tr></thead>'
+        +'<tbody><tr class="pdf-tr"><td>'+(p.ddtId||'—')+'</td><td>1</td><td>28.5 kg</td><td>'+(p.ricevente||'—')+'</td></tr></tbody></table>'
+        +'<div style="margin-top:22px;padding-top:12px;border-top:1px dashed #ccc">'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:8px">'
+        +'<div><div style="font-weight:600;margin-bottom:24px">FIRMA RICEVENTE</div><div style="height:26px;border-bottom:1px solid #999;margin-bottom:4px"></div><div style="color:#777">'+(p.ricevente||'—')+'</div></div>'
+        +'<div><div style="font-weight:600;margin-bottom:6px">DATA E ORA</div><div style="font-size:10px;font-weight:700">'+(p.ricevuta||'—')+'</div></div>'
+        +'</div>'
+        +(p.st==='consegnato'?'<div style="position:absolute;bottom:30px;right:18px;border:3px solid #1a7a4a;border-radius:5px;padding:5px 12px;color:#1a7a4a;font-size:12px;font-weight:700;transform:rotate(-9deg);opacity:.6">CONSEGNATO</div>':'')
+        +(p.st==='restituito'?'<div style="position:absolute;bottom:30px;right:18px;border:3px solid #f57c00;border-radius:5px;padding:5px 12px;color:#f57c00;font-size:12px;font-weight:700;transform:rotate(-9deg);opacity:.6">RESTITUITO</div>':'')
+        +'</div></div></div>'
+      : '<div style="height:100%;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);border-radius:8px;margin:16px">'
+        +'<div style="font-size:40px;opacity:.3;margin-bottom:12px">📄</div>'
+        +'<div style="font-size:14px;font-weight:600;color:var(--mut)">Non sono presenti documenti collegati</div>'
+        +'<div style="font-size:12px;color:var(--sub);margin-top:6px">Inserisci un documento POD usando il pannello a sinistra</div>'
+        +'</div>'
+    )
     +'</div></div>'
-  :'')
+    +'</div>';
+}
 
-  +audit(at)
-  +'</div>'
-
-  // ── PDF right ─────────────────────────────────────────────────
-  +'<div class="split-r"><div class="pdf-viewer-wrap"><div class="pdf-toolbar">'
-  +'<span>📄 '+(p.file||'documento_POD.pdf')+'</span>'
-  +'<button class="btn btn-sm">⬇ PDF</button>'
-  +'</div>'
-  +'<div class="pdf-stage"><div class="pdf-page">'
-  +'<div class="pdf-hdr">'
-  +'<div style="font-size:10px;font-weight:700;color:#333">'+p.vett.toUpperCase()+'</div>'
-  +'<div style="text-align:right;font-size:8px;color:#666">Proof of Delivery<br>Prova di Consegna</div>'
-  +'</div>'
-  +'<div class="pdf-doctitle">PROVA DI CONSEGNA</div>'
-  +'<div class="pdf-meta">'
-  +'<div><div class="pdf-meta-lbl">Nr. LDV / Tracking</div><div class="pdf-meta-val">'+(p.ldv||'—')+'</div></div>'
-  +'<div><div class="pdf-meta-lbl">Data consegna</div><div class="pdf-meta-val">'+(p.ricevuta||'—')+'</div></div>'
-  +'<div><div class="pdf-meta-lbl">Mittente</div><div class="pdf-meta-val">Esaote SpA — Firenze</div></div>'
-  +'<div><div class="pdf-meta-lbl">Destinatario</div><div class="pdf-meta-val">'+(p.dest||'—')+'</div></div>'
-  +'</div>'
-  +'<table class="pdf-tbl"><thead><tr><th>Rif. DDT</th><th>Colli</th><th>Peso (kg)</th><th>Consegnato a</th></tr></thead>'
-  +'<tbody><tr class="pdf-tr"><td>'+(p.ddtId||'—')+'</td><td>1</td><td>28.5</td><td>'+(p.ricevente||'—')+'</td></tr></tbody>'
-  +'</table>'
-  +'<div style="margin-top:22px;padding-top:12px;border-top:1px dashed #ccc">'
-  +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:8px">'
-  +'<div>'
-  +'<div style="font-weight:600;margin-bottom:24px">FIRMA RICEVENTE</div>'
-  +'<div style="height:26px;border-bottom:1px solid #999;margin-bottom:4px"></div>'
-  +'<div style="font-size:7.5px;color:#777">'+(p.ricevente||'In attesa')+'</div>'
-  +'</div>'
-  +'<div>'
-  +'<div style="font-weight:600;margin-bottom:6px">DATA E ORA CONSEGNA</div>'
-  +'<div style="font-size:10px;font-weight:700;color:#000">'+(p.ricevuta||'—')+'</div>'
-  +'</div>'
-  +'</div>'
-  +(p.st==='ricevuta'?'<div style="position:absolute;bottom:30px;right:18px;border:3px solid #1a7a4a;border-radius:5px;padding:5px 12px;color:#1a7a4a;font-size:12px;font-weight:700;letter-spacing:1px;transform:rotate(-9deg);opacity:.6">CONSEGNATO</div>':'')
-  +'</div>'
-  +'</div></div></div></div>'
-  +'</div>';
+function podInsertDoc(podId){
+  var p=D.pod.find(function(x){return x.id===podId;}); if(!p)return;
+  p.file='POD_'+podId+'_manual.pdf';
+  CURRENT_POD_ID=podId;
+  go('pod-d');
+  showToast('Documento POD inserito — '+podId);
+}
+function podRemoveDoc(podId){
+  var p=D.pod.find(function(x){return x.id===podId;}); if(!p)return;
+  if(!confirm('Rimuovere il documento POD?'))return;
+  p.file='';
+  CURRENT_POD_ID=podId;
+  go('pod-d');
+  showToast('Documento rimosso — '+podId);
+}
+function podSaveAnnot(podId){
+  var p=D.pod.find(function(x){return x.id===podId;}); if(!p)return;
+  var ta=document.getElementById('pod-annot-'+podId);
+  if(ta)p.annotazione=ta.value;
+  showToast('Annotazione aggiornata — '+podId);
 }
 
 function podSapDownloadDet(podId){
@@ -2259,58 +2551,126 @@ function podBulkDown(){var n=SEL_POD.size;if(n===0)return;showToast('Download ZI
 
 function rPodRecovery(){
   function podBadge(s){
-    return({ricevuta:'<span class="badge ok" style="font-size:10.5px">✓ POD ricevuta</span>',da_abbinare:'<span class="badge warn" style="font-size:10.5px">⚠ Da abbinare</span>',attesa:'<span class="badge info" style="font-size:10.5px">⏳ Attesa consegna</span>',anomalia:'<span class="badge err" style="font-size:10.5px">✗ Anomalia</span>',scaduta:'<span class="badge err" style="font-size:10.5px">⏰ Scaduta</span>'})[s]||'<span class="badge grey">'+s+'</span>';
+    return({
+      consegnato:'<span class="badge ok" style="font-size:10.5px">✓ Consegnato</span>',
+      restituito:'<span class="badge warn" style="font-size:10.5px">↩ Restituito</span>',
+      in_transito:'<span class="badge info" style="font-size:10.5px">⏳ In transito</span>',
+      da_abbinare:'<span class="badge warn" style="font-size:10.5px">⚠ Da abbinare</span>',
+      anomalia:'<span class="badge err" style="font-size:10.5px">✗ Anomalia</span>',
+      scaduta:'<span class="badge err" style="font-size:10.5px">⏰ Scaduta</span>'
+    })[s]||'<span class="badge grey">'+s+'</span>';
   }
-  var ricevute  = D.pod.filter(function(p){return p.st==='ricevuta';}).length;
-  var daAbbinare = D.pod.filter(function(p){return p.st==='da_abbinare';}).length;
-  var attesa    = D.pod.filter(function(p){return p.st==='attesa';}).length;
-  var conSap    = D.pod.filter(function(p){return p.azSap;}).length;
+  var consegnati  = D.pod.filter(function(p){return p.st==='consegnato';}).length;
+  var daAbbinare  = D.pod.filter(function(p){return p.st==='da_abbinare';}).length;
+  var inTransito  = D.pod.filter(function(p){return p.st==='in_transito';}).length;
+  var conSap      = D.pod.filter(function(p){return p.azSap;}).length;
 
   return '<div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">'
-    +'<div class="stat s-ok" style="cursor:default"><div class="stat-lbl">POD ricevute</div><div class="stat-val" style="color:var(--ok)">'+ricevute+'</div><div class="stat-note">Match automatico</div></div>'
-    +'<div class="stat s-warn" style="cursor:default"><div class="stat-lbl">Da abbinare manualmente</div><div class="stat-val" style="color:#f57c00">'+daAbbinare+'</div><div class="stat-note">Nr. LDV non trovato</div></div>'
-    +'<div class="stat s-info" style="cursor:default"><div class="stat-lbl">In attesa consegna</div><div class="stat-val" style="color:var(--acc)">'+attesa+'</div><div class="stat-note">DDT firmate, POD non ancora</div></div>'
-    +'<div class="stat s-ok" style="cursor:default"><div class="stat-lbl">Confermati in SAP</div><div class="stat-val" style="color:var(--ok)">'+conSap+'</div><div class="stat-note">Download eseguito</div></div>'
+    +'<div class="stat s-ok" style="cursor:default"><div class="stat-lbl">Consegnate</div><div class="stat-val" style="color:var(--ok)">'+consegnati+'</div><div class="stat-note">Confermate</div></div>'
+    +'<div class="stat s-warn" style="cursor:default"><div class="stat-lbl">Da abbinare</div><div class="stat-val" style="color:#f57c00">'+daAbbinare+'</div><div class="stat-note">Match manuale</div></div>'
+    +'<div class="stat s-info" style="cursor:default"><div class="stat-lbl">In transito</div><div class="stat-val" style="color:var(--acc)">'+inTransito+'</div><div class="stat-note">In attesa POD</div></div>'
+    +'<div class="stat s-ok" style="cursor:default"><div class="stat-lbl">Confermati SAP</div><div class="stat-val" style="color:var(--ok)">'+conSap+'</div><div class="stat-note">Download eseguito</div></div>'
     +'</div>'
 
-      // coda rimossa — abbinamento dal dettaglio riga
-  // Main POD list
-    +fbar([{type:'text',p:'Nr. LDV, DDT, vettore...'},{type:'select',lbl:'Stato',opts:['Ricevuta','Da abbinare','Attesa','Anomalia']},{type:'select',lbl:'Tutti i vettori',opts:D.vettori.map(function(v){return v.name;})},{type:'date',lbl:'Dal'},{type:'date',lbl:'Al'},{type:'clr'},{type:'sp'},{type:'cnt',v:D.pod.length}])
-    +'<div id="bulk-pod" style="display:none" class="bulk-bar"><span id="pod-cnt" style="font-weight:600">0 selezionate</span><button class="btn btn-sm" onclick="podBulkDown()">⬇ Download ZIP per SAP</button><button class="btn btn-sm" onclick="podSelNone()">✕ Annulla</button></div>'
-    +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">'
-    +'<button class="btn btn-sm" onclick="showToast(\'Export CSV POD\')">⬇ CSV</button>'
-    +'<button class="btn btn-sm" onclick="showToast(\'Export XLSX POD\')">⬇ XLSX</button>'
+    // ── Filter bar principale (4 campi) ──
+    +'<div class="card" style="margin-bottom:10px"><div style="padding:12px 16px">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr auto auto;gap:8px;align-items:end;margin-bottom:8px">'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Num. Consegna</div><input class="icr-i" placeholder="Es. 0080041233" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Corriere</div>'
+    +'<select class="fsel" style="width:100%"><option value="">Tutti i corrieri</option>'
+    +[...new Set(D.pod.map(function(p){return p.corriereCod+' / '+p.corriereDescr;}))].map(function(v){return '<option>'+v+'</option>';}).join('')
+    +'</select></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Stato</div>'
+    +'<select class="fsel" style="width:100%"><option value="">Tutti gli stati</option><option>Consegnato</option><option>Restituito</option><option>In transito</option><option>Da abbinare</option><option>Anomalia</option></select>'
     +'</div>'
-    +'<div class="card"><table class="tbl"><thead><tr>'
-    +'<th style="width:36px"><input type="checkbox" class="chk" onchange="podSelAll(this.checked)"></th><th>ID POD</th><th>DDT abbinata</th><th>Nr. Trasporto SAP</th><th>Vettore</th><th>Nr. LDV</th><th>Destinazione</th><th>Firma DDT</th><th>Ricevuta</th><th>Ricevente</th><th>Conf. ICR</th><th>Stato POD</th><th>Conferma SAP</th><th></th>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Data uscita</div><input type="date" class="fdate" style="width:140px"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Data consegna</div><input type="date" class="fdate" style="width:140px"></div>'
+    +'</div>'
+    +'<button class="adv-toggle" onclick="var el=document.getElementById(\'adv-pod\');el.classList.toggle(\'open\');this.innerHTML=el.classList.contains(\'open\')?\'▲ Meno filtri\':\'▼ Filtri avanzati\'">▼ Filtri avanzati</button>'
+    +'<div class="adv-filters" id="adv-pod">'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Num. Conferma</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Num. Identificazione</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Num. Trasporto</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">CMR</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>SI</option><option>NO</option></select></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Doc. abbinati</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>SI</option><option>NO</option></select></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Codice Dest.</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Org. Vendita</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Paese</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>IT</option><option>DE</option><option>FR</option><option>ES</option></select></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">$dIDTrack</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Magazzino RTTF</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Numero Fattura</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Vettore Descr.</div><input class="icr-i" style="width:100%"></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Firmata cliente</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>SI</option><option>NO</option></select></div>'
+    +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Timbrata</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>SI</option><option>NO</option></select></div>'
+    +'</div>'
+    +'<div style="display:flex;justify-content:flex-end;gap:8px;padding-top:10px">'
+    +'<button class="btn btn-sm" onclick="showToast(\'Filtri azzerati\')">✕ Clear</button>'
+    +'<button class="btn btn-sm btn-p" onclick="showToast(\'Ricerca applicata\')">🔍 Cerca</button>'
+    +'<span style="margin-left:auto;font-size:12px;color:var(--mut);padding-top:6px">'+D.pod.length+' record</span>'
+    +'</div>'
+    +'</div></div>'
+
+    // ── Bulk bar ──
+    +'<div id="bulk-pod" style="display:none" class="bulk-bar"><span id="pod-cnt" style="font-weight:600">0 selezionate</span>'
+    +'<button class="btn btn-sm" onclick="podBulkDown()">⬇ Download ZIP per SAP</button>'
+    +'<button class="btn btn-sm" onclick="podSelNone()">✕ Annulla</button></div>'
+    +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px">'
+    +'<button class="btn btn-sm" onclick="showToast(\'Export CSV\')">⬇ CSV</button>'
+    +'<button class="btn btn-sm" onclick="showToast(\'Export XLSX\')">⬇ XLSX</button>'
+    +'</div>'
+
+    // ── Tabella ──
+    +'<div class="card"><div style="overflow-x:auto"><table class="tbl" style="min-width:1600px"><thead><tr>'
+    +'<th style="width:36px"><input type="checkbox" class="chk" onchange="podSelAll(this.checked)"></th>'
+    +'<th>Doc. abb.</th><th>CMR</th><th>Firmata cliente</th><th>Timbrata</th>'
+    +'<th>ID POD</th><th>Nr. Trasporto SAP</th>'
+    +'<th>Corriere</th><th>Corriere finale</th>'
+    +'<th>Nr. LDV</th><th>Destinazione</th>'
+    +'<th>Cod. Dest.</th><th>SdCumulo</th>'
+    +'<th>Org. Vend.</th><th>Paese</th>'
+    +'<th>$dIDTrack</th><th>RTTF</th><th>Num. FT</th>'
+    +'<th>Uscita merce</th><th>Consegna</th>'
+    +'<th>Conf. ICR</th><th>Stato</th><th>SAP</th><th></th>'
     +'</tr></thead><tbody>'
     +D.pod.map(function(p){
-      var sapBtn = p.st==='ricevuta'
+      var sapBtn = p.st==='consegnato'
         ? (p.azSap
-          ?'<span class="badge ok" style="font-size:10px">✓ Scaricato</span>'
-          :'<button class="btn btn-sm" style="font-size:10.5px;white-space:nowrap" onclick="event.stopPropagation();podSapDownload(\''+p.id+'\',this)">⬇ Download SAP</button>')
-        :'<span style="color:var(--sub);font-size:12px">—</span>';
+          ? '<span class="badge ok" style="font-size:10px">✓ SAP</span>'
+          : '<button class="btn btn-sm" style="font-size:10px;white-space:nowrap" onclick="event.stopPropagation();podSapDownload(\''+p.id+'\',this)">⬇ SAP</button>')
+        : '<span style="color:var(--sub);font-size:12px">—</span>';
+      var yesNo = function(v){ return v ? '<span class="badge ok" style="font-size:10px">SI</span>' : '<span class="badge grey" style="font-size:10px">NO</span>'; };
       return '<tr class="tr" onclick="CURRENT_POD_ID=\''+p.id+'\';go(\'pod-d\')" style="cursor:pointer">'
         +'<td onclick="event.stopPropagation()" style="width:36px"><input type="checkbox" class="chk pod-chk" data-id="'+p.id+'" onchange="podToggle(this)"></td>'
-        +'<td class="mono" style="font-size:11px;cursor:pointer">'+p.id+'</td>'
-        +'<td class="mono" style="font-size:11.5px">'+(p.ddtId||'<span style="color:var(--warn)">Da abbinare</span>')+'</td>'
-        +'<td class="mono" style="font-size:11.5px">'+(p.sap||'—')+'</td>'
-        +'<td style="font-size:12px">'+p.vett+'</td>'
+        +'<td style="text-align:center">'+yesNo(p.docAbbinati)+'</td>'
+        +'<td style="text-align:center">'+yesNo(p.cmr)+'</td>'
+        +'<td style="text-align:center">'+yesNo(p.firmataCli)+'</td>'
+        +'<td style="text-align:center">'+yesNo(p.timbrata)+'</td>'
+        +'<td class="mono" style="font-size:11px">'+p.id+'</td>'
+        +'<td class="mono" style="font-size:11px">'+(p.sap||'<span style="color:var(--sub)">—</span>')+'</td>'
+        +'<td style="font-size:11.5px"><span class="mono" style="font-size:10px">'+p.corriereCod+'</span></td>'
+        +'<td style="font-size:11.5px">'+p.corriereDescr+'</td>'
         +'<td class="mono" style="font-size:11px">'+(p.ldv||'<span style="color:var(--sub)">—</span>')+'</td>'
         +'<td style="font-size:12px">'+p.dest+'</td>'
-        +'<td style="font-size:12px">'+(p.firmaDdt||'<span style="color:var(--sub)">—</span>')+'</td>'
+        +'<td style="font-size:11px">'+(p.codDest||'—')+'</td>'
+        +'<td class="mono" style="font-size:10.5px">'+(p.sdCumulo||'—')+'</td>'
+        +'<td style="font-size:11px">'+(p.orgVendita||'—')+'</td>'
+        +'<td style="font-size:11px">'+(p.paese||'—')+'</td>'
+        +'<td class="mono" style="font-size:10.5px">'+(p.dIDTrack||'—')+'</td>'
+        +'<td style="font-size:11px">'+(p.rttf||'—')+'</td>'
+        +'<td class="mono" style="font-size:11px">'+(p.numFt||'—')+'</td>'
+        +'<td style="font-size:12px">'+(p.dataUscita||'—')+'</td>'
         +'<td style="font-size:12px">'+(p.ricevuta||'<span style="color:var(--sub)">—</span>')+'</td>'
-        +'<td style="font-size:12px">'+(p.ricevente||'<span style="color:var(--sub)">—</span>')+'</td>'
         +'<td>'+(p.conf>0?'<span class="cf h">'+p.conf+'%</span>':'<span style="color:var(--sub)">—</span>')+'</td>'
         +'<td>'+podBadge(p.st)+'</td>'
         +'<td>'+sapBtn+'</td>'
-        +'<td>'+(p.file?'<a style="font-size:11px;color:var(--acc);cursor:pointer" onclick="event.stopPropagation();showToast(\'Download '+p.file+'\')">PDF</a>':'<span style="color:var(--sub)">—</span>')+'</td>'
+        +'<td><a style="font-size:11px;color:var(--acc);cursor:pointer;white-space:nowrap" onclick="event.stopPropagation();CURRENT_POD_ID=\''+p.id+'\';go(\'pod-d\')">Apri →</a></td>'
         +'</tr>';
     }).join('')
     +'</tbody></table></div>'
-    +'<div style="padding:8px 0;font-size:12px;color:var(--mut)">'+D.pod.length+' DDT monitorate — ultimi 7 giorni</div>'
+    +'<div style="padding:8px 18px;font-size:12px;color:var(--mut)">'+D.pod.length+' spedizioni monitorate — ultimi 7 giorni</div>'
+    +'</div>'
     +'<div style="margin-top:10px;padding:10px 14px;background:var(--infol);border-radius:8px;font-size:12.5px;color:var(--info)">'
-    +'📋 <strong>Fase 2:</strong> integrazione API carrier (BRT, DHL, GLS) per ricezione automatica POD e update stato in tempo reale. Nr. LDV estratto automaticamente dal PDF DDT.'
+    +'📋 <strong>Fase 2:</strong> integrazione API carrier (BRT, DHL, GLS) per ricezione POD automatica e aggiornamento stato real-time.'
     +'</div>';
 }
 
@@ -2328,6 +2688,354 @@ function podSapDownload(podId, btn){
   if(p) p.azSap = true;
   if(btn){btn.outerHTML='<span class="badge ok" style="font-size:10px">✓ Scaricato</span>';}
   showToast('Download per SAP: conferma consegna '+podId);
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER — DOCUMENTI RICEVUTI
+// ═══════════════════════════════════════════════════════════
+var _drTab='caricati';
+var CURRENT_DR_ID='DR-001';
+
+function rDocRicevuti(){
+  var caricati = D.docRicevuti.filter(function(d){return d.st==='caricato';});
+  var anomalie = D.docRicevuti.filter(function(d){return d.st==='anomalia';});
+  function renderTabContent(tab){
+    var items = tab==='caricati' ? caricati : anomalie;
+    var filterHtml = tab==='caricati'
+      ? '<div style="display:grid;grid-template-columns:1fr 1fr 1fr auto auto auto;gap:8px;align-items:end;margin-bottom:8px">'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Codice Corriere</div><select class="fsel" style="width:100%"><option value="">Tutti</option>'
+        +[...new Set(D.docRicevuti.map(function(d){return d.corriereCod+' / '+d.corriereDescr;}))].map(function(v){return '<option>'+v+'</option>';}).join('')
+        +'</select></div>'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Descr. Corriere</div><input class="icr-i" style="width:100%"></div>'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Canale Ingresso</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>Email</option><option>SFTP</option><option>FTP</option><option>API</option><option>Cartaceo</option></select></div>'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Data caricamento</div><input type="date" class="fdate" style="width:140px"></div>'
+        +'<button class="btn btn-sm btn-p" onclick="showToast(\'Ricerca applicata\')">🔍 Cerca</button>'
+        +'<button class="btn btn-sm" onclick="showToast(\'Filtri azzerati\')">✕ Reset</button>'
+        +'</div>'
+      : '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto auto;gap:8px;align-items:end;margin-bottom:8px">'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Data caricamento</div><input type="date" class="fdate" style="width:100%"></div>'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Tipo Documento</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>CMR</option><option>POD</option></select></div>'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Canale Ingresso</div><select class="fsel" style="width:100%"><option value="">Tutti</option><option>Email</option><option>SFTP</option><option>FTP</option><option>API</option><option>Cartaceo</option></select></div>'
+        +'<div><div class="info-lbl" style="margin-bottom:3px;font-size:10.5px">Codice Corriere</div><select class="fsel" style="width:100%"><option value="">Tutti</option>'
+        +[...new Set(D.docRicevuti.map(function(d){return d.corriereCod+' / '+d.corriereDescr;}))].map(function(v){return '<option>'+v+'</option>';}).join('')
+        +'</select></div>'
+        +'<button class="btn btn-sm btn-p" onclick="showToast(\'Ricerca applicata\')">🔍 Cerca</button>'
+        +'<button class="btn btn-sm" onclick="showToast(\'Filtri azzerati\')">✕ Reset</button>'
+        +'</div>';
+
+    return filterHtml
+      +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px">'
+      +'<button class="btn btn-sm" onclick="showToast(\'Export CSV\')">⬇ CSV</button>'
+      +'</div>'
+      +'<div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr>'
+      +'<th style="width:36px"></th>'
+      +'<th style="width:36px"><input type="checkbox" class="chk"></th>'
+      +'<th>Nome File</th><th>Data caricamento</th><th>Data consegna</th>'
+      +'<th>Descr. Corriere</th><th>Tipo Doc.</th><th>Canale</th>'
+      +(tab==='anomalie'?'<th>Azione</th>':'')
+      +'</tr></thead><tbody>'
+      +items.map(function(d){
+        var tipoBadge = d.tipoDoc==='POD'?'<span class="badge info" style="font-size:10px">POD</span>':'<span class="badge grey" style="font-size:10px">CMR</span>';
+        var canale = '<span class="badge grey" style="font-size:10px">'+d.canale+'</span>';
+        var actionBtn = tab==='anomalie'
+          ? '<button class="btn btn-sm btn-p" style="font-size:10.5px" onclick="event.stopPropagation();openSceliPodModal(\''+d.id+'\')">Scegli POD</button>'
+          : '';
+        return '<tr class="tr" onclick="CURRENT_DR_ID=\''+d.id+'\';go(\'doc-ricevuti-d\')" style="cursor:pointer">'
+          +'<td onclick="event.stopPropagation()"><span style="color:var(--acc);cursor:pointer;font-size:16px" onclick="event.stopPropagation();CURRENT_DR_ID=\''+d.id+'\';go(\'doc-ricevuti-d\')">🔍</span></td>'
+          +'<td onclick="event.stopPropagation()"><input type="checkbox" class="chk"></td>'
+          +'<td class="mono" style="font-size:11.5px">'+d.nomeFile+'</td>'
+          +'<td style="font-size:12px">'+d.dataCaricamento+'</td>'
+          +'<td style="font-size:12px">'+(d.dataConsegna||'<span style="color:var(--sub)">—</span>')+'</td>'
+          +'<td style="font-size:12px">'+d.corriereDescr+'</td>'
+          +'<td>'+tipoBadge+'</td>'
+          +'<td>'+canale+'</td>'
+          +(tab==='anomalie'?'<td>'+actionBtn+'</td>':'')
+          +'</tr>';
+      }).join('')
+      +'</tbody></table></div>'
+      +'<div style="padding:8px 18px;font-size:12px;color:var(--mut)">'+items.length+' documenti</div>'
+      +'</div>';
+  }
+
+  return '<div class="card" style="padding:0;overflow:hidden">'
+    +'<div class="doc-tabs">'
+    +'<button class="doc-tab'+(_drTab==='caricati'?' active':'')+'" onclick="_drTab=\'caricati\';document.getElementById(\'dr-content\').innerHTML=drTabContent(\'caricati\')">Caricati ('+caricati.length+')</button>'
+    +'<button class="doc-tab'+(_drTab==='anomalie'?' active':'')+'" onclick="_drTab=\'anomalie\';document.getElementById(\'dr-content\').innerHTML=drTabContent(\'anomalie\')">Anomalie ('+anomalie.length+')</button>'
+    +'</div>'
+    +'<div style="padding:14px 16px" id="dr-content">'
+    +renderTabContent(_drTab)
+    +'</div></div>';
+
+  function drTabContent(tab){ return renderTabContent(tab); }
+}
+
+function drTabContent(tab){
+  go('doc-ricevuti');
+  _drTab=tab;
+  // Force re-render
+  var el=document.getElementById('dr-content');
+  if(!el){go('doc-ricevuti');return;}
+  // will re-render via go()
+}
+
+function rDocRicevutiD(){
+  var d = D.docRicevuti.find(function(x){return x.id===CURRENT_DR_ID;}) || D.docRicevuti[0];
+  var isAnomalia = d.st==='anomalia';
+  return '<div class="bc"><a onclick="go(\'doc-ricevuti\')">Documenti Ricevuti</a><span class="bc-sep">›</span><span class="mono">'+d.id+'</span>'
+    +(isAnomalia?'<span class="badge warn">⚠ Anomalia</span>':'<span class="badge ok">✓ Caricato</span>')
+    +'</div>'
+    +'<div class="split"><div class="split-l">'
+    +'<div class="card"><div class="card-h"><div class="card-title">Dettaglio documento</div></div>'
+    +'<div class="info-grid" style="grid-template-columns:1fr 1fr">'
+    +[['Codice Corriere',d.corriereCod],['Descr. Corriere',d.corriereDescr],
+      ['P.IVA Corriere',d.pivaCorriere],['Mail mittente',d.mailMittente],
+      ['Canale ingresso',d.canale],['Tipo documento',d.tipoDoc],
+      ['Data caricamento',d.dataCaricamento],['Data consegna',d.dataConsegna||'—']
+    ].map(function(x){
+      return '<div class="info-field"><div class="info-lbl">'+x[0]+'</div><div class="info-val" style="font-size:12.5px">'+(x[1]||'—')+'</div></div>';
+    }).join('')
+    +'</div></div>'
+    +(isAnomalia?'<div class="card"><div class="card-h"><div class="card-title">Dati editabili</div></div>'
+      +'<div style="padding:14px 18px">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Data consegna</div><input class="icr-i" id="dr-edit-data" value="'+d.dataConsegna+'" style="width:100%"></div>'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Codice Corriere</div><input class="icr-i" id="dr-edit-cod" value="'+d.corriereCod+'" style="width:100%"></div>'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Descr. Corriere</div><input class="icr-i" id="dr-edit-descr" value="'+d.corriereDescr+'" style="width:100%;"></div>'
+      +'<div><div class="info-lbl" style="margin-bottom:4px">Canale ingresso</div><input class="icr-i" value="'+d.canale+'" style="width:100%;background:var(--bg)" readonly></div>'
+      +'</div>'
+      +'<div class="info-lbl" style="margin-bottom:4px">Annotazione</div>'
+      +'<textarea id="dr-edit-annot" class="icr-i" style="width:100%;min-height:60px;resize:vertical">'+d.annotazione+'</textarea>'
+      +'</div></div>'
+    :'')
+    +'<div style="padding:14px 18px;display:flex;gap:8px;flex-wrap:wrap">'
+    +(isAnomalia?'<button class="btn btn-p" onclick="openSceliPodModal(\''+d.id+'\')">🔗 Scegli POD</button>':'')
+    +(isAnomalia?'<button class="btn btn-ok" onclick="drSaveEdit(\''+d.id+'\')">✓ Aggiorna</button>':'')
+    +(isAnomalia?'<button class="btn btn-err" onclick="drDelete(\''+d.id+'\')">✗ Elimina anomalia</button>':'')
+    +'<button class="btn" onclick="go(\'doc-ricevuti\')">← Indietro</button>'
+    +'</div>'
+    +'</div>'
+    +'<div class="split-r"><div class="pdf-wrap"><div class="pdf-tb"><span>📄 '+d.nomeFile+'</span></div>'
+    +'<div class="pdf-stage"><div class="pdf-page">'
+    +'<div class="pdf-hdr"><div style="font-size:10px;font-weight:700">'+d.corriereDescr.toUpperCase()+'</div><div style="text-align:right;font-size:8px;color:#666">'+d.tipoDoc+'</div></div>'
+    +'<div class="pdf-doctitle">DOCUMENTO '+d.tipoDoc+'</div>'
+    +'<div class="pdf-meta">'
+    +'<div><div class="pdf-meta-lbl">Corriere</div><div class="pdf-meta-val">'+d.corriereDescr+'</div></div>'
+    +'<div><div class="pdf-meta-lbl">Data</div><div class="pdf-meta-val">'+d.dataCaricamento+'</div></div>'
+    +'<div><div class="pdf-meta-lbl">Canale</div><div class="pdf-meta-val">'+d.canale+'</div></div>'
+    +'<div><div class="pdf-meta-lbl">File</div><div class="pdf-meta-val">'+d.nomeFile+'</div></div>'
+    +'</div>'
+    +'<div style="background:#fff8e1;border:1px dashed #f57c00;border-radius:6px;padding:10px;margin:12px 0;font-size:11px;color:#f57c00">&#9888; '+d.annotazione+'</div>'
+    +'<div style="border:2px dashed #c00;border-radius:4px;padding:10px;text-align:center">'
+    +'<div style="font-size:9px;color:#c00;font-weight:700;margin-bottom:16px">AREA FIRMA / TIMBRO</div>'
+    +'<div style="height:24px;border-bottom:1px solid #999;margin:0 20px"></div>'
+    +'<div style="font-size:8px;color:#999;margin-top:4px">Non abbinato</div>'
+    +'</div></div></div>'+'</div></div></div>'
+    +'</div>';
+}
+
+function drSaveEdit(id){
+  var d=D.docRicevuti.find(function(x){return x.id===id;}); if(!d)return;
+  var dc=document.getElementById('dr-edit-data');
+  var cod=document.getElementById('dr-edit-cod');
+  var descr=document.getElementById('dr-edit-descr');
+  var annot=document.getElementById('dr-edit-annot');
+  if(dc)d.dataConsegna=dc.value;
+  if(cod)d.corriereCod=cod.value;
+  if(descr)d.corriereDescr=descr.value;
+  if(annot)d.annotazione=annot.value;
+  showToast('Documento '+id+' aggiornato');
+}
+
+function drDelete(id){
+  if(!confirm('Eliminare l\'anomalia '+id+'?'))return;
+  D.docRicevuti=D.docRicevuti.filter(function(x){return x.id!==id;});
+  go('doc-ricevuti');
+  showToast('Anomalia '+id+' eliminata');
+}
+
+function openSceliPodModal(drId){
+  var existing=document.getElementById('sceli-pod-ov');
+  if(existing)existing.remove();
+  var ov=document.createElement('div');
+  ov.id='sceli-pod-ov';ov.className='modal-ov';
+  ov.onclick=function(e){if(e.target===ov)ov.remove();};
+  ov.innerHTML='<div class="modal" style="max-width:520px">'
+    +'<div class="modal-hdr"><div class="modal-title">Scegli POD record</div>'
+    +'<button class="modal-close" onclick="document.getElementById(\'sceli-pod-ov\').remove()">&#10005;</button></div>'
+    +'<div class="modal-body">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
+    +'<input class="icr-i" id="sp-conf" placeholder="Num. Conferma">'
+    +'<input class="icr-i" id="sp-tr" placeholder="Num. Trasporto">'
+    +'<input class="icr-i" id="sp-id" placeholder="Num. Identificazione">'
+    +'<select class="fsel" id="sp-corr" style="width:100%;padding:9px 10px"><option value="">Corriere</option>'
+    +D.vettori.map(function(v){return '<option value="'+v.id+'">'+v.name+'</option>';}).join('')
+    +'</select>'
+    +'</div>'
+    +'<div style="font-size:12px;color:var(--mut);margin-bottom:10px">Scegliere un record per poter agganciare il documento</div>'
+    +'<div id="sp-results"></div>'
+    +'</div>'
+    +'<div class="modal-foot">'
+    +'<button class="btn btn-ok" id="sp-confirm-btn" disabled onclick="sceliPodConfirm(\''+drId+'\')">Conferma</button>'
+    +'<button class="btn btn-p" onclick="sceliPodSearch()">Cerca</button>'
+    +'<button class="btn" onclick="document.getElementById(\'sceli-pod-ov\').remove()">Chiudi</button>'
+    +'</div></div>';
+  document.body.appendChild(ov);
+  sceliPodSearch();
+}
+var _sceliSel=null;
+function sceliPodSearch(){
+  var conf=document.getElementById('sp-conf');
+  var tr=document.getElementById('sp-tr');
+  var corr=document.getElementById('sp-corr');
+  var res=document.getElementById('sp-results');if(!res)return;
+  var items=D.pod.filter(function(p){return p.st==='da_abbinare'||p.st==='in_transito';});
+  if(conf&&conf.value)items=items.filter(function(p){return p.id.toLowerCase().indexOf(conf.value.toLowerCase())>=0;});
+  if(tr&&tr.value)items=items.filter(function(p){return (p.sap||'').indexOf(tr.value)>=0;});
+  if(corr&&corr.value)items=items.filter(function(p){return p.vettId===corr.value;});
+  if(!items.length){res.innerHTML='<div style="padding:14px;text-align:center;color:var(--mut);font-size:12px">Nessun record trovato.</div>';return;}
+  res.innerHTML='<table class="tbl"><thead><tr><th style="width:30px"></th><th>ID POD</th><th>Vettore</th><th>Nr. SAP</th><th>Destinazione</th></tr></thead><tbody>'
+    +items.map(function(p){
+      return '<tr style="cursor:pointer" onclick="sceliHL(\''+p.id+'\')">'
+        +'<td><input type="radio" name="sp-r" value="'+p.id+'" onchange="sceliSel2(\''+p.id+'\')"></td>'
+        +'<td class="mono" style="font-size:11.5px">'+p.id+'</td><td style="font-size:12px">'+p.vett+'</td>'
+        +'<td class="mono" style="font-size:11.5px">'+(p.sap||'—')+'</td><td style="font-size:12px">'+p.dest+'</td></tr>';
+    }).join('')
+    +'</tbody></table>';
+}
+function sceliHL(id){
+  document.querySelectorAll('[name="sp-r"]').forEach(function(r){if(r.value===id)r.checked=true;});
+  sceliSel2(id);
+}
+function sceliSel2(id){_sceliSel=id;var b=document.getElementById('sp-confirm-btn');if(b)b.disabled=false;}
+function sceliPodConfirm(drId){if(!_sceliSel)return;sceliPodSelect(drId,_sceliSel);_sceliSel=null;}
+
+function sceliPodSelect(drId, podId){
+  var d=D.docRicevuti.find(function(x){return x.id===drId;});
+  var p=D.pod.find(function(x){return x.id===podId;});
+  if(d&&p){
+    d.podId=podId;d.st='caricato';
+    p.docAbbinati=true;
+    if(!p.file)p.file=d.nomeFile;
+  }
+  document.getElementById('sceli-pod-ov').remove();
+  showToast('Abbinamento completato: '+drId+' → '+podId);
+  go('doc-ricevuti');
+}
+
+function rScostamenti(){
+  var items=[
+    {id:'SC-001',sap:'4500089156',sup:'Philips Medical Systems',art:'MR-DISP-15-ASM',descr:'Display Assembly 15"',qtaOrd:3,qtaConf:2,qtaRic:2,qtaAtt:0,note:'Shortage — restante a settembre',log:[{ts:'13/06 09:10',user:'Sistema (DDT-118)',val:2}]},
+    {id:'SC-002',sap:'4500088654',sup:'GE Healthcare Tech.',art:'GE-XRAY-PANEL-A',descr:'Flat Panel Detector XR',qtaOrd:2,qtaConf:2,qtaRic:1,qtaAtt:1,note:'1 unità in transito — consegna 20/06',log:[{ts:'12/06 14:30',user:'Sistema (DDT-115)',val:1}]},
+    {id:'SC-003',sap:'4500088901',sup:'Mindray Medical Intl.',art:'MR-PCB-ADV-10',descr:'Advanced PCB Module',qtaOrd:5,qtaConf:5,qtaRic:3,qtaAtt:2,note:'2 unità in secondo trasporto',log:[{ts:'11/06 10:00',user:'Sistema (DDT-112)',val:2},{ts:'12/06 16:00',user:'M. Martinis',val:1}]},
+    {id:'SC-004',sap:'4500089234',sup:'Siemens Healthineers',art:'SH-PROBE-L18',descr:'Sonde US L18-5',qtaOrd:6,qtaConf:6,qtaRic:6,qtaAtt:0,note:'Completato',log:[{ts:'10/06 11:00',user:'Sistema (DDT-108)',val:6}]},
+    {id:'SC-005',sap:'4500089001',sup:'Philips Medical Systems',art:'PH-MONITOR-17',descr:'Monitor Paziente 17"',qtaOrd:4,qtaConf:3,qtaRic:0,qtaAtt:3,note:'Solo 3 unità confermate — ODA in revisione',log:[]},
+  ];
+  function pct(a,b){return b>0?Math.round(a/b*100):0;}
+  function sb(a,b){var p=pct(a,b);return p>=100?'<span class="scost-badge scost-ok">&#10003; Completo</span>':p>=50?'<span class="scost-badge scost-warn">&#9684; Parziale '+p+'%</span>':'<span class="scost-badge scost-err">&#10007; Scostamento '+p+'%</span>';}
+  var totOrd=items.reduce(function(s,x){return s+x.qtaOrd;},0);
+  var totRic=items.reduce(function(s,x){return s+x.qtaRic;},0);
+  var totAtt=items.reduce(function(s,x){return s+x.qtaAtt;},0);
+  var nSc=items.filter(function(x){return x.qtaRic<x.qtaConf;}).length;
+  return '<div class="stats-row" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">'
+    +'<div class="stat s-info" style="cursor:default"><div class="stat-lbl">Totale ordinato</div><div class="stat-val" style="color:var(--acc)">'+totOrd+' pz</div></div>'
+    +'<div class="stat s-ok" style="cursor:default"><div class="stat-lbl">Ricevuto</div><div class="stat-val" style="color:var(--ok)">'+totRic+' pz</div><div class="stat-note">'+pct(totRic,totOrd)+'%</div></div>'
+    +'<div class="stat s-warn" style="cursor:default"><div class="stat-lbl">In attesa</div><div class="stat-val" style="color:#f57c00">'+totAtt+' pz</div></div>'
+    +'<div class="stat s-err" style="cursor:default"><div class="stat-lbl">Con scostamento</div><div class="stat-val" style="color:var(--err)">'+nSc+'</div></div>'
+    +'</div>'
+    +fbar([{type:'text',p:'ODA, articolo, fornitore...'},{type:'select',lbl:'Stato',opts:['Completo','Parziale','Scostamento']},{type:'select',lbl:'Tutti i fornitori',opts:D.sup.map(function(s){return s.name;})},{type:'clr'},{type:'sp'},{type:'cnt',v:items.length}])
+    +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px"><button class="btn btn-sm" onclick="showToast(\'Export CSV\')">&#11015; CSV</button></div>'
+    +'<div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr>'
+    +'<th>Nr. ODA SAP</th><th>Fornitore</th><th>Cod. Art.</th><th>Descrizione</th>'
+    +'<th>Qtà ordinata</th><th>Qtà confermata</th><th>Qtà ricevuta</th><th>Qtà attesa</th>'
+    +'<th>Copertura</th><th>Note</th></tr></thead><tbody>'
+    +items.map(function(x){
+      var p=pct(x.qtaRic,x.qtaConf);
+      var col=p>=100?'var(--ok)':p>=50?'#f57c00':'var(--err)';
+      return '<tr style="cursor:default">'
+        +'<td class="mono" style="font-size:11.5px">'+x.sap+'</td>'
+        +'<td style="font-size:12px">'+x.sup+'</td>'
+        +'<td class="mono" style="font-size:11.5px">'+x.art+'</td>'
+        +'<td style="font-size:12px">'+x.descr+'</td>'
+        +'<td style="text-align:center;font-weight:600">'+x.qtaOrd+'</td>'
+        +'<td style="text-align:center;font-weight:600;color:'+(x.qtaConf<x.qtaOrd?'#f57c00':'inherit')+'">'+x.qtaConf+'</td>'
+        +'<td style="text-align:center">'
+        +'<div style="display:flex;align-items:center;justify-content:center;gap:5px">'
+        +'<span id="qric-'+x.id+'" style="font-weight:700;font-size:14px;color:'+col+'">'+x.qtaRic+'</span>'
+        +'<button class="btn btn-sm" style="font-size:10px;padding:2px 7px;line-height:1.4" onclick="event.stopPropagation();scostAddQty(\''+x.id+'\')">+ Aggiungi</button>'
+        +'</div>'
+        +'<div id="qlog-'+x.id+'" style="margin-top:4px">'
+        +(x.log.length>0?x.log.map(function(l){return '<div style="font-size:9.5px;color:var(--mut);white-space:nowrap">'+l.ts+' · '+l.user+' (+'+l.val+')</div>';}).join(''):'')+'</div>'
+        +'</td>'
+        +'<td style="text-align:center;color:var(--mut)">'+x.qtaAtt+'</td>'
+        +'<td><div>'+sb(x.qtaRic,x.qtaConf)+'</div>'
+        +'<div class="scost-bar-wrap" style="width:70px"><div class="scost-bar" style="width:'+p+'%;background:'+col+'"></div></div></td>'
+        +'<td style="font-size:11.5px;color:var(--mut)">'+x.note+'</td>'
+        +'</tr>';
+    }).join('')
+    +'</tbody></table></div>'
+    +'<div style="padding:8px 18px;font-size:12px;color:var(--mut)">'+items.length+' articoli monitorati</div>'
+    +'</div>';
+}
+
+var SEL_DDT_F=new Set();
+function ddtFToggle(chk){
+  var id=chk.getAttribute('data-id');
+  if(chk.checked)SEL_DDT_F.add(id);else SEL_DDT_F.delete(id);
+  var all=document.getElementById('chkf-all');
+  var boxes=document.querySelectorAll('.ddt-f-chk');
+  if(all)all.checked=boxes.length>0&&Array.from(boxes).every(function(b){return b.checked;});
+  ddtFUpdBar();
+}
+function ddtFSelectAll(on){
+  document.querySelectorAll('.ddt-f-chk').forEach(function(b){
+    b.checked=on!==false;
+    var id=b.getAttribute('data-id');
+    if(b.checked)SEL_DDT_F.add(id);else SEL_DDT_F.delete(id);
+  });
+  ddtFUpdBar();
+}
+function ddtFSelectNone(){
+  SEL_DDT_F.clear();
+  document.querySelectorAll('.ddt-f-chk').forEach(function(b){b.checked=false;});
+  var all=document.getElementById('chkf-all');
+  if(all)all.checked=false;
+  ddtFUpdBar();
+}
+function ddtFUpdBar(){
+  var n=SEL_DDT_F.size;
+  var bar=document.getElementById('bulk-ddt-f');
+  var cnt=document.getElementById('ddt-f-cnt');
+  if(bar)bar.style.display=n>0?'flex':'none';
+  if(cnt)cnt.textContent=n+' selezionate';
+}
+function ddtFBulkDownload(){
+  var n=SEL_DDT_F.size;
+  if(n===0){showToast('Nessuna DDT selezionata');return;}
+  showToast('Download per SAP — ZIP con '+n+' DDT firmate');
+  ddtFSelectNone();
+}
+
+function scostAddQty(id){
+  var val=prompt('Aggiungi quantità ricevuta per '+id+' (es. 2):');
+  if(val===null)return;
+  var n=parseInt(val);
+  if(isNaN(n)||n<=0){showToast('Valore non valido');return;}
+  var now=new Date().toLocaleDateString('it-IT')+' '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+  // Update in-memory (in demo items are local — just update DOM)
+  var valEl=document.getElementById('qric-'+id);
+  var logEl=document.getElementById('qlog-'+id);
+  if(valEl){
+    var cur=parseInt(valEl.textContent)||0;
+    valEl.textContent=cur+n;
+    valEl.style.color='var(--ok)';
+  }
+  if(logEl){
+    var row=document.createElement('div');
+    row.style.cssText='font-size:9.5px;color:var(--mut);white-space:nowrap';
+    row.textContent=now+' · M. Martinis (+'+n+')';
+    logEl.insertBefore(row,logEl.firstChild);
+  }
+  showToast('Quantità aggiornata: +'+n+' pz per '+id);
 }
 
 showLogin();
