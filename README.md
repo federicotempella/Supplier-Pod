@@ -133,5 +133,5 @@ Il portale è progettato per operare in due fasi:
 ## Sviluppato da
 
 **Digital Technologies S.r.l.**
-Via Eritrea 21 — Trezzano sul Naviglio (MI)
+Via Politi, 10 — Trezzano sul Naviglio (MI)
 [www.digtechs.com](https://www.digtechs.com) · A Namirial Company
