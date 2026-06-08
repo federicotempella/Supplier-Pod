@@ -3,6 +3,7 @@
 > Portale web per la gestione documentale del ciclo acquisti (P2P) e della logistica attiva (DDT, firma trasportatore, POD Recovery).
 > Sviluppato da **Digital Technologies S.r.l.** per **Esaote SpA**.
 
+https://federicotempella.github.io/Supplier-Pod/esaote_portal_mockup_v4_27
 ---
 
 ## Demo
