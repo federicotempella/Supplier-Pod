@@ -1,7 +1,7 @@
-# DT Platform — Esaote SpA
+# DT Platform — Esaote Spa - Tecnokar
 
 > Portale web per la gestione documentale del ciclo acquisti (P2P) e della logistica attiva (DDT, firma trasportatore, POD Recovery).
-> Sviluppato da **Digital Technologies S.r.l.** per **Esaote SpA**.
+> Sviluppato da **Digital Technologies S.r.l.** per **Esaote SpA** (con esempi reali di altre aziende).
 
 https://federicotempella.github.io/Supplier-Pod/esaote_portal_mockup_v4_27
 ---
